@@ -1,6 +1,6 @@
-# Digitize
+# Synq Digital Services
 
-A premium, responsive landing page for **Digitize**, a digital product studio.
+A premium, responsive landing page for **Synq Digital Services**, a digital product studio.
 
 ## Run locally
 
@@ -16,7 +16,9 @@ Then visit [http://localhost:8080](http://localhost:8080).
 
 - Responsive, semantic single-page layout
 - Sticky glass navigation and mobile menu
+- Custom Synq Digital branding (logo in nav/footer, logo favicon)
 - Light/dark theme toggle (persisted locally)
+- Pricing with a Naira (₦) / US Dollar ($) currency switcher (persisted locally)
 - Scroll reveals, counters, magnetic CTAs, and back-to-top control
 - Accessible FAQ and contact form feedback
-- Portfolio, services, process, testimonials, pricing, technology, and contact sections
+- Services, process, testimonials, pricing, technology, and contact sections

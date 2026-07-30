@@ -41,11 +41,27 @@ sections.forEach(section => navObserver.observe(section));
 
 // Theme setting respects current preference, but is always user controllable.
 const themeButton = $('.theme-toggle');
-if (localStorage.getItem('digitize-theme') === 'dark') document.body.classList.add('dark');
+if (localStorage.getItem('synq-theme') === 'dark') document.body.classList.add('dark');
 themeButton.addEventListener('click', () => {
   document.body.classList.toggle('dark');
-  localStorage.setItem('digitize-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  localStorage.setItem('synq-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
 });
+
+// Pricing currency switcher between Naira and US Dollar; the choice is remembered between visits.
+const currencyButtons = $$('.currency-switch button');
+const priceAmounts = $$('.price-amount[data-ngn][data-usd]');
+const setCurrency = currency => {
+  currencyButtons.forEach(button => {
+    const active = button.dataset.currency === currency;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', active);
+  });
+  priceAmounts.forEach(amount => { amount.textContent = amount.dataset[currency]; });
+  localStorage.setItem('synq-currency', currency);
+};
+currencyButtons.forEach(button => button.addEventListener('click', () => setCurrency(button.dataset.currency)));
+const savedCurrency = localStorage.getItem('synq-currency');
+if (savedCurrency === 'ngn' || savedCurrency === 'usd') setCurrency(savedCurrency);
 
 const backTop = $('.back-top');
 window.addEventListener('scroll', () => backTop.classList.toggle('show', scrollY > 650), { passive: true });
