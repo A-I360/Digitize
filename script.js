@@ -80,10 +80,21 @@ if (matchMedia('(pointer:fine)').matches) {
   });
 }
 
-// This demo form gives immediate feedback without pretending to submit personal data.
+// Hand the enquiry straight to WhatsApp instead of pretending to submit it somewhere.
+const WHATSAPP_NUMBER = '2348162903238';
 $('.contact-form').addEventListener('submit', event => {
   event.preventDefault();
-  $('.form-success').textContent = 'Thanks — your project note is ready for our team. We’ll be in touch shortly.';
+  const data = new FormData(event.currentTarget);
+  const lines = [
+    `Hi Synq Digital, I'd like to start a project.`,
+    `Name: ${data.get('name')}`,
+    `Email: ${data.get('email')}`,
+    `Project type: ${data.get('type')}`,
+    `Budget: ${data.get('budget')}`,
+    data.get('message') ? `Details: ${data.get('message')}` : null,
+  ].filter(Boolean);
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
+  $('.form-success').textContent = 'Opening WhatsApp with your project details — send the message to reach us.';
   event.currentTarget.reset();
 });
 $('.newsletter form').addEventListener('submit', event => { event.preventDefault(); event.currentTarget.reset(); });
