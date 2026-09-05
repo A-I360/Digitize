@@ -3,14 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Under Construction — Synq Digital Services</title>
+  <title>Under Construction — SYNQ Technological Services</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body style="display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#0b0b0b;color:#fff;font-family:Manrope,sans-serif;text-align:center;">
-  <div>
-    <h1 style="font-size:3rem;margin-bottom:.5rem;">Under Construction</h1>
+<body class="uc-page">
+  <div class="uc-card">
+    <p class="eyebrow"><span></span> Coming soon</p>
+    <h1>This page is under construction.</h1>
     <p>Our social presence is being rebuilt. Check back soon.</p>
-    <a href="index.html" style="display:inline-block;margin-top:1.5rem;color:#0b5fff;text-decoration:none;font-weight:600;">Back to site →</a>
+    <a href="index.html" class="button button-primary">Back to site <span>→</span></a>
   </div>
+  <style>
+    .uc-page{min-height:100vh;margin:0;display:grid;place-items:center;background:#0b1222;color:#fff;padding:24px}
+    .uc-card{max-width:520px;text-align:center}
+    .uc-card h1{font-size:clamp(32px,6vw,48px);letter-spacing:-2px;margin:0 0 12px}
+    .uc-card p{color:#b0bfd7}
+    .uc-card .eyebrow{color:#8da3cb}
+  </style>
 </body>
 </html>
