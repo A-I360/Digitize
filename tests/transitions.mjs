@@ -281,6 +281,38 @@ section('Reduced motion collapses every duration');
   closeAllWindows();
 }
 
+section('Reduced motion is honoured when it changes mid-visit');
+{
+  const env = loadPage('index.html');
+  const { window } = env;
+  let reduceMotion = false;
+  window.matchMedia = (q) => ({
+    matches: /prefers-reduced-motion/.test(q) ? reduceMotion : false,
+    media: q, onchange: null,
+    addEventListener() {}, removeEventListener() {},
+    addListener() {}, removeListener() {},
+  });
+
+  const instance = await freshTransition('live-reduce');
+  await wait(60);
+
+  // Turn it on after the module has already loaded. A module-scope capture
+  // would not notice.
+  reduceMotion = true;
+
+  const started = Date.now();
+  instance.go('/about.html');
+  await wait(60);
+  const withReduce = navigationAttempts();
+
+  // COVER_MS is 420; the reduced path is 90. If the setting was read at import
+  // time this would still be waiting.
+  expect(Date.now() - started < 300,
+    `the switch takes effect without a reload (${Date.now() - started}ms, not 420ms)`);
+  expect(withReduce >= 1, 'and the navigation still happens');
+  closeAllWindows();
+}
+
 section('The inline failsafes in the page head');
 {
   // transition.js is a module: if it never runs, the inline script in <head>

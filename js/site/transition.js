@@ -28,7 +28,13 @@ const REVEAL_MS = 460;
 const BOOT_MIN_MS = 620;
 const BOOT_MAX_MS = 2000;
 
-const reduced = prefersReducedMotion();
+/**
+ * Read live rather than captured. `prefersReducedMotion()` is cheap, and a
+ * visitor can turn "reduce motion" on in their OS settings mid-visit — if the
+ * value were sampled once at import, the change would not take effect until
+ * they reloaded the page.
+ */
+const reduced = () => prefersReducedMotion();
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const nextFrame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
@@ -141,13 +147,13 @@ class Transition {
     clearInterval(timer);
     if (fill) fill.style.width = '100%';
     if (pct) pct.textContent = '100%';
-    await wait(reduced ? 0 : 180);
+    await wait(reduced() ? 0 : 180);
 
     if (boot) {
       boot.classList.add('is-done');
       setTimeout(() => {
         boot.hidden = true;
-      }, reduced ? 0 : 460);
+      }, reduced() ? 0 : 460);
     }
     document.documentElement.classList.remove('is-booting');
     document.body.classList.add('page-enter');
@@ -165,7 +171,7 @@ class Transition {
     document.body.classList.add('page-enter');
     setTimeout(() => {
       veil.classList.remove('is-revealing', 'is-busy');
-    }, reduced ? 90 : REVEAL_MS);
+    }, reduced() ? 90 : REVEAL_MS);
   }
 
   /** Exit to another internal page. */
@@ -182,7 +188,7 @@ class Transition {
       /* storage blocked — navigation still works, just without the sweep */
     }
 
-    await wait(reduced ? 90 : COVER_MS);
+    await wait(reduced() ? 90 : COVER_MS);
     window.location.href = href;
 
     // If the browser somehow declines to navigate, release the latch. A real

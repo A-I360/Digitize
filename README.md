@@ -261,6 +261,41 @@ Static analysis, the level bot and the HTTP crawl all passed while these were li
 The last two are the reason the crawl suite now fires hostile paths at the server and
 then checks that the homepage still answers.
 
+## The original review findings
+
+`REVIEW.md` audited the site before this work started. Every finding is
+resolved, and the ones that could be are now covered by a test:
+
+| Finding | Status |
+|---|---|
+| C1 Without JavaScript most of the page is invisible | Rebuilt as server-rendered HTML with progressive enhancement; `<noscript>` nav on every page and an honest explanation on the game page |
+| C2 One `localStorage` exception breaks the script | Every access goes through `lib/storage.js`, which never throws, with an in-memory fallback |
+| C3 Dark mode leaves text near-invisible | Both themes are defined in `tokens.css`; the contrast suite checks every pair against WCAG AA |
+| C4 Anchors hide headings behind the fixed nav | `scroll-padding-top` on `:root` |
+| C5 Keyboard trap in `role="img"` | Removed with the old hero |
+| C6 Third-party stranger avatars | Gone. Real generated art, no external images anywhere |
+| H1 Flash of wrong theme | Pre-paint inline script, before first paint |
+| H2 Native cursor hidden on desktop | Never hidden |
+| H3 Contact form loses data and lies | Hand-off to WhatsApp with an honest message; with an endpoint, real POST and the server's own words |
+| H4 Fake social proof | Invented clients, logos and testimonials removed; sample work is labelled |
+| H5 Inconsistent numbers | One source in `config.js` and the project data |
+| H6 Nav overflows 800–1050px | Rebuilt responsive chrome |
+| Two permanent `requestAnimationFrame` loops | Canvas field stops on `IntersectionObserver` and `visibilitychange` |
+| Canvas not DPR-aware | DPR-aware with `setTransform`, capped at 2× |
+| Oversized PNGs | Every image has a WebP sibling; none over 200 KB |
+| No image dimensions or lazy-loading | Both, asserted by the performance suite |
+| Contact CTA specificity collision | Rebuilt on the token system |
+| `.contact-inner::before` paints over the form | Removed |
+| `.fx-grid` overlays page content | `z-index: -1`, `pointer-events: none` |
+| Menu button label never updates | `aria-label` and `aria-expanded` follow state |
+| Unescaped ampersands | Escaped |
+| `<label>` misused as a badge | Real `<label>`/`for` pairs only |
+| `+` glyph in `<summary>` read aloud | Marker is `aria-hidden` |
+| Newsletter form was decorative | Removed rather than faked |
+| Contact details duplicated 4× | One source in `config.js` |
+| `prefers-reduced-motion` sampled once | Read live, so changing the OS setting works without a reload |
+| Dead CSS, duplicate footer rules, no tokens, 22 KB single line, stale cache-busting | Rebuilt as six token-driven stylesheets with no cache-busting queries |
+
 ## Structured data
 
 JSON-LD is generated in `js/site/structured-data.js` from the same `config.js`
