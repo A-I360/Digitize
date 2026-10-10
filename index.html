@@ -1,145 +1,375 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="SYNQ Technological Services designs and builds remarkable websites, apps, games, and AI-powered digital products." />
-  <meta name="theme-color" content="#ffffff" />
-  <title>SYNQ Technological Services — Transforming Ideas Into Digital Reality</title>
-  <link rel="icon" type="image/png" href="assets/favicon.png" />
-  <link rel="apple-touch-icon" href="assets/favicon.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=8" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SYNQ Technological Services — Transforming Ideas Into Digital Reality</title>
+<meta name="description" content="SYNQ Technological Services is a digital product studio in Lagos building websites, web applications, interactive experiences and original games.">
+<link rel="canonical" href="https://synqtech.org/">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SYNQ Technological Services">
+<meta property="og:title" content="SYNQ Technological Services — Transforming Ideas Into Digital Reality">
+<meta property="og:description" content="A digital product studio building websites, web applications, interactive experiences and original games.">
+<meta property="og:url" content="https://synqtech.org/">
+<meta property="og:image" content="https://synqtech.org/assets/img/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SYNQ Technological Services">
+<meta name="twitter:description" content="Websites, web apps, interactive experiences and original games.">
+<meta name="twitter:image" content="https://synqtech.org/assets/img/og-cover.jpg">
+
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/img/favicon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;700;800&display=swap">
+
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/components.css">
+<link rel="stylesheet" href="styles/site.css">
+<link rel="stylesheet" href="styles/transition.css">
+
+<script>
+/* Inline boot: theme before first paint + the overlay scaffolding.
+   Must stay tiny and dependency-free. Independent timeout failsafes mean no
+   overlay can ever trap the visitor, even if the module bundle fails. */
+(function () {
+  var d = document.documentElement, ls = null, nav = false;
+  try { ls = localStorage.getItem('synq:theme'); } catch (e) {}
+  try { nav = sessionStorage.getItem('synq:navigating') === '1'; sessionStorage.removeItem('synq:navigating'); } catch (e) {}
+  var dark = ls ? ls === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  d.classList.add('js');
+  d.classList.toggle('dark', !!dark);
+  d.classList.toggle('light', !dark);
+  if (nav) d.classList.add('is-route-nav');
+
+  function scaffold() {
+    var b = document.createElement('div');
+    b.className = 'boot-loader'; b.id = 'boot-loader';
+    b.setAttribute('data-boot-loader', '');
+    b.setAttribute('role', 'status');
+    b.setAttribute('aria-live', 'polite');
+    b.setAttribute('aria-label', 'Loading');
+    if (nav) b.hidden = true;
+    b.innerHTML =
+      '<div class="boot-loader__inner">' +
+        '<svg class="boot-mark" viewBox="0 0 100 100" aria-hidden="true"><defs>' +
+          '<linearGradient id="bootStroke" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0" stop-color="#0b5fff"/><stop offset="1" stop-color="#00c8f0"/>' +
+          '</linearGradient></defs>' +
+          '<path class="boot-mark__glow" d="M73 27c-6-8-16-12-25-10C35 19 25 29 23 42c-2 14 4 26 15 32 9 5 19 4 27-1"/>' +
+          '<path class="boot-mark__path" d="M73 27c-6-8-16-12-25-10C35 19 25 29 23 42c-2 14 4 26 15 32 9 5 19 4 27-1"/>' +
+        '</svg>' +
+        '<div class="boot-word">SYNQ<small>DIGITAL STUDIO</small></div>' +
+        '<div class="boot-bar"><div class="boot-bar__fill" data-boot-fill></div></div>' +
+        '<div class="boot-meta"><span>Preparing the studio</span><span data-boot-pct>0%</span></div>' +
+      '</div>';
+    document.body.appendChild(b);
+
+    var v = document.createElement('div');
+    v.className = 'route-veil'; v.id = 'route-veil';
+    v.setAttribute('data-route-veil', '');
+    v.setAttribute('aria-hidden', 'true');
+    v.innerHTML =
+      '<div class="route-veil__panel"></div><div class="route-veil__panel"></div>' +
+      '<div class="route-veil__panel"></div><div class="route-veil__panel"></div>' +
+      '<div class="route-veil__panel"></div>' +
+      '<div class="route-veil__mark"><span>SYNQ</span></div>';
+    document.body.appendChild(v);
+
+    setTimeout(function () {
+      if (!d.classList.contains('is-route-nav')) return;
+      d.classList.remove('is-route-nav');
+      v.classList.remove('is-covering', 'is-busy');
+      v.classList.add('is-revealing');
+    }, 2400);
+    setTimeout(function () {
+      if (b && !b.classList.contains('is-done')) {
+        b.classList.add('is-done');
+        setTimeout(function () { b.hidden = true; }, 460);
+      }
+    }, 3400);
+  }
+
+  if (document.body) scaffold();
+  else document.addEventListener('DOMContentLoaded', scaffold, { once: true });
+})();
+</script>
 </head>
-<body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <div class="fx-grid" aria-hidden="true"></div>
-  <div class="cursor-glow" aria-hidden="true"></div>
-  <div class="cursor-ring" aria-hidden="true"></div>
-  <div class="cursor-dot" aria-hidden="true"></div>
-  <header class="nav-wrap" id="home">
-    <nav class="nav" aria-label="Main navigation">
-      <a href="#home" class="brand" aria-label="SYNQ Technological Services home"><img src="assets/synq-mark.png?v=6" alt="" class="brand-mark-img"><span class="brand-name">SYNQ Technological <em>Services</em></span></a>
-      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links"><span></span><span></span></button>
-      <div class="nav-links" id="nav-links">
-        <a class="active" href="#home">Home</a><a href="#services">Services</a><a href="#lab">Lab</a><a href="#process">Process</a><a href="#why-us">Why us</a><a href="#testimonials">Stories</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a>
-      </div>
-      <div class="nav-actions"><button class="theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark theme">◐</button><a href="#contact" class="nav-cta magnetic">Start a project <span>↗</span></a></div>
-    </nav>
-  </header>
 
-  <main id="main">
-    <section class="hero section-grid">
-      <div class="hero-copy reveal">
-        <p class="eyebrow"><span></span> Independent digital studio · Est. 2022 · Signal online</p>
-        <h1>Building the digital future, <em>one project</em> at a time.</h1>
-        <p class="lede">We design and build stunning websites, powerful mobile applications, engaging games, and intelligent systems that feel a decade ahead — and still convert today.</p>
-        <div class="hero-actions"><a href="#contact" class="button button-primary magnetic">Start your project <span>→</span></a><a href="#services" class="button button-quiet">Explore our services <span>↓</span></a></div>
-        <div class="hero-proof"><div class="avatars" aria-hidden="true"><img src="https://i.pravatar.cc/80?img=47" alt=""><img src="https://i.pravatar.cc/80?img=32" alt=""><img src="https://i.pravatar.cc/80?img=12" alt=""><b>100+</b></div><p>Trusted by ambitious teams<br><strong>across 12 countries</strong></p></div>
-      </div>
-      <div class="hero-art reveal" role="img" aria-label="Abstract digital workspace illustration">
-        <canvas class="neural-canvas" width="640" height="570" aria-hidden="true"></canvas>
-        <div class="orb orb-one"></div><div class="orb orb-two"></div>
-        <div class="hud-chip">LIVE · LATENCY 12ms</div>
-        <div class="art-window"><div class="window-top"><i></i><i></i><i></i><span>synq.digital / workspace</span><b>•••</b></div><div class="workspace"><aside><div class="mini-logo">S.</div><span class="selected"></span><span></span><span></span><span></span></aside><div class="screen"><div class="screen-nav"><b>Overview</b><span>Analytics</span><span>Activity</span><button>Export</button></div><div class="metric-row"><div><small>Weekly growth</small><strong>+42.8<sup>%</sup></strong><em>↗ 8.2% vs last week</em></div><div class="donut"></div></div><div class="chart"><svg viewBox="0 0 500 130" preserveAspectRatio="none"><path d="M0 105 C45 98 55 78 92 85 S135 112 170 70 S215 80 247 47 S300 80 335 54 S380 20 420 43 S465 10 500 16" fill="none" stroke="url(#chart-gradient)" stroke-width="5"/><path d="M0 105 C45 98 55 78 92 85 S135 112 170 70 S215 80 247 47 S300 80 335 54 S380 20 420 43 S465 10 500 16 V130 H0Z" fill="url(#fade)"/><defs><linearGradient id="chart-gradient"><stop stop-color="#00d4ff"/><stop offset="1" stop-color="#0b5fff"/></linearGradient><linearGradient id="fade" x2="0" y2="1"><stop stop-color="#0b5fff" stop-opacity=".18"/><stop offset="1" stop-color="#0b5fff" stop-opacity="0"/></linearGradient></defs></svg></div></div></div></div>
-        <div class="float-card code-card"><div class="code-dots"><i></i><i></i><i></i></div><code><b>const</b> future =<br>&nbsp;await <span>create</span>();</code></div>
-        <div class="float-card app-card"><div class="phone"><div class="phone-notch"></div><small>Good morning</small><b>Move with<br>purpose.</b><div class="app-chart"></div><p>12,824 <small>steps</small></p></div></div>
-        <div class="float-card status-card"><span>✦</span><div><small>System status</small><b>All systems go</b></div><i></i></div>
-      </div>
-    </section>
+<body id="top" data-page="home">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="fx-grid" aria-hidden="true"></div>
+<div class="fx-aurora" aria-hidden="true"></div>
 
-    <section class="trusted"><p>Chosen by people building what’s next</p><div class="logo-row"><b>vertex</b><b>northstar</b><b>◎ orbit</b><b>kinetic</b><b>ARCADIA</b><b>◈ FORM</b></div></section>
+<noscript>
+  <div class="noscript-nav" role="navigation" aria-label="Navigation">
+    <a href="index.html"><strong>SYNQ</strong></a>
+    <a href="about.html">About</a><a href="services.html">Services</a>
+    <a href="portfolio.html">Work</a><a href="game.html">The Game</a><a href="contact.html">Contact</a>
+  </div>
+</noscript>
 
-    <section id="services" class="section services">
-      <div class="section-heading reveal"><p class="eyebrow"><span></span> What we do</p><h2>Built for the ideas<br>that <em>won't sit still.</em></h2><p>From first spark to market momentum, we turn complex ambitions into experiences people remember.</p></div>
-      <div class="services-grid">
-        <article class="service-card feature-card reveal"><div class="service-icon">⌘</div><div><h3>Website development</h3><p>High-performing, conversion-led websites engineered for speed, search, and scale.</p><a href="#contact">Explore service <span>→</span></a></div><div class="card-visual web-visual"><div></div><span></span><span></span></div></article>
-        <article class="service-card reveal"><div class="service-icon">◒</div><h3>App development</h3><p>Beautiful iOS and Android products that make every tap feel intentional.</p><a href="#contact">Explore service <span>→</span></a></article>
-        <article class="service-card reveal"><div class="service-icon">✣</div><h3>Game development</h3><p>Immersive 2D and 3D worlds built for play, delight, and lasting engagement.</p><a href="#contact">Explore service <span>→</span></a></article>
-        <article class="service-card reveal"><div class="service-icon">◈</div><h3>UI/UX design</h3><p>Clear, joyful interfaces grounded in real user behaviour and business goals.</p><a href="#contact">Explore service <span>→</span></a></article>
-        <article class="service-card reveal"><div class="service-icon">✦</div><h3>AI automation</h3><p>Smart systems that remove repetitive work and give your team time back.</p><a href="#contact">Explore service <span>→</span></a></article>
-        <article class="service-card reveal"><div class="service-icon">▣</div><h3>Business software</h3><p>Custom tools that connect your operations and unlock better decisions.</p><a href="#contact">Explore service <span>→</span></a></article>
-      </div>
-    </section>
+<div data-chrome-header></div>
 
-    <section id="lab" class="section lab">
-      <div class="section-heading reveal">
-        <p class="eyebrow"><span></span> Future lab</p>
-        <h2>Capabilities that feel<br><em>a few years early.</em></h2>
-        <p>Not gimmicks — practical, next-gen layers we ship into real products for founders who want to lead, not follow.</p>
-      </div>
-      <div class="lab-grid">
-        <article class="lab-card tilt reveal"><div class="lab-icon">01</div><h3>Adaptive AI interfaces</h3><p>Screens that learn intent, surface the next action, and stay calm when the data gets noisy.</p></article>
-        <article class="lab-card tilt reveal"><div class="lab-icon">02</div><h3>Realtime product telemetry</h3><p>Live dashboards, event streams, and growth loops so you see what users do — as they do it.</p></article>
-        <article class="lab-card tilt reveal"><div class="lab-icon">03</div><h3>Immersive 3D &amp; WebGL</h3><p>Spatial product stories, configurators, and game-grade motion that still load in a blink.</p></article>
-        <article class="lab-card tilt reveal"><div class="lab-icon">04</div><h3>Voice &amp; agent workflows</h3><p>Assistants that book, brief, and automate ops — wired into the tools your team already uses.</p></article>
-        <article class="lab-card tilt reveal"><div class="lab-icon">05</div><h3>Secure identity layers</h3><p>Auth, payments, and permissions designed like a vault: quiet, fast, and hard to break.</p></article>
-        <article class="lab-card tilt reveal"><div class="lab-icon">06</div><h3>Always-on growth systems</h3><p>Experimentation, SEO, and lifecycle messaging that keep compounding after launch day.</p></article>
-      </div>
-    </section>
+<main id="main" tabindex="-1">
 
-    <section id="why-us" class="why section-grid"><div class="why-visual reveal"><div class="why-box"><p>Small team.<br><em>Big energy.</em></p><span>Designed with intention<br>Built to perform</span><div class="rays"></div></div></div><div class="why-copy reveal"><p class="eyebrow"><span></span> Why SYNQ</p><h2>Your vision deserves more than a vendor.</h2><p>We are a focused crew of strategists, designers and engineers who treat your goals like our own. Direct access. No layers. Exceptional care.</p><div class="benefits"><span>✦ Fast, focused delivery</span><span>✦ Clean, future-proof code</span><span>✦ Mobile-first, always</span><span>✦ Search-ready foundations</span><span>✦ Security by design</span><span>✦ Support beyond launch</span></div><a href="#contact" class="button button-primary magnetic">Meet the team <span>→</span></a></div></section>
+  <!-- ── Hero ─────────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="shell">
+      <div class="hero__grid">
+        <div class="hero__copy">
+          <p class="eyebrow reveal">Independent digital studio · Lagos · Est. 2022</p>
+          <h1 class="hero__title reveal" style="--reveal-delay:60ms">
+            Building the digital future, <span class="serif">one project</span> at a time.
+          </h1>
+          <p class="hero__lede reveal" style="--reveal-delay:120ms">
+            We design and build fast websites, capable web applications, immersive
+            interactive experiences and original games — with the engineering
+            discipline to keep them running long after launch day.
+          </p>
 
-    <section id="process" class="section process"><div class="section-heading reveal"><p class="eyebrow"><span></span> How we work</p><h2>Clarity at every<br><em>turn.</em></h2></div><div class="process-list"><article class="reveal"><b>01</b><div><h3>Discovery</h3><p>We learn your world, audience, and ambition—then turn insight into a focused plan.</p></div><span>↘</span></article><article class="reveal"><b>02</b><div><h3>Design</h3><p>We shape a visual system and intuitive product experience worth getting excited about.</p></div><span>↘</span></article><article class="reveal"><b>03</b><div><h3>Development</h3><p>Our engineers bring it to life with thoughtful, scalable technology and meticulous craft.</p></div><span>↘</span></article><article class="reveal"><b>04</b><div><h3>Launch & grow</h3><p>We test, deploy and stay close—measuring the things that matter after go-live.</p></div><span>✦</span></article></div></section>
+          <div class="hero__actions reveal" style="--reveal-delay:180ms">
+            <a class="btn btn--primary btn--lg" href="contact.html">
+              Start a project <span class="btn__icon" aria-hidden="true">↗</span>
+            </a>
+            <a class="btn btn--ghost btn--lg btn--down" href="#services">
+              What we do <span class="btn__icon" aria-hidden="true">↓</span>
+            </a>
+          </div>
 
-    <section class="stats"><div class="stats-inner"><article class="reveal"><b data-count="100" data-suffix="+">0</b><p>Projects completed</p></article><article class="reveal"><b data-count="4" data-suffix="+">0</b><p>Years of experience</p></article><article class="reveal"><b data-count="98" data-suffix="%">0</b><p>Client satisfaction</p></article><article class="reveal"><b>24/7</b><p>Human support</p></article></div></section>
+          <div class="hero__pills reveal" style="--reveal-delay:220ms">
+            <span class="badge badge--mint badge--dot">Available for new work</span>
+            <span class="badge badge--neutral">Websites</span>
+            <span class="badge badge--neutral">Web apps</span>
+            <span class="badge badge--neutral">Games</span>
+          </div>
 
-    <section id="testimonials" class="section testimonials"><div class="section-heading reveal"><p class="eyebrow"><span></span> Client stories</p><h2>Good work creates<br><em>good words.</em></h2><p>Real outcomes from founders and teams who trusted us with work that mattered.</p></div><div class="rating-strip reveal"><div class="rating-score"><b>4.9</b><div class="stars">★★★★★</div></div><span class="rating-copy">Average rating across <strong>100+</strong> client reviews</span></div><div class="testimonial-track"><article class="testimonial reveal"><span class="quote-mark" aria-hidden="true">”</span><div class="stars">★★★★★</div><blockquote>“From our very first meeting, SYNQ Technological Services understood exactly what our brand stood for. They delivered a website that is fast, elegant, and already bringing us serious client enquiries. Money well spent.”</blockquote><footer><span class="t-avatar t-one" aria-hidden="true">UO</span><div><b>Mr. Ugochukwu Ojimadu</b><span>Property Developer · Lagos</span></div></footer></article><article class="testimonial featured reveal"><label>Most loved</label><span class="quote-mark" aria-hidden="true">”</span><div class="stars">★★★★★</div><blockquote>“Professionalism on another level. They rebuilt our online store, integrated payments seamlessly, and sales have grown month after month since launch. I recommend SYNQ Technological Services without any hesitation.”</blockquote><footer><span class="t-avatar t-two" aria-hidden="true">JA</span><div><b>Mr. John Akinwunmi</b><span>E-commerce Founder · Abuja</span></div></footer></article><article class="testimonial reveal"><span class="quote-mark" aria-hidden="true">”</span><div class="stars">★★★★★</div><blockquote>“What impressed me most was their honesty and attention to detail. Every timeline was kept, every request was handled with patience, and the final product exceeded what we imagined.”</blockquote><footer><span class="t-avatar t-three" aria-hidden="true">WJ</span><div><b>Mr. Williams Joseph</b><span>Operations Lead · Port Harcourt</span></div></footer></article></div></section>
-
-    <section class="tech"><p class="eyebrow"><span></span> Tools with taste</p><div class="marquee"><div><span>HTML</span><span>JavaScript</span><span>TypeScript</span><span>React</span><span>Next.js</span><span>Node.js</span><span>Flutter</span><span>Supabase</span><span>Python</span><span>Unity</span><span>Docker</span><span>HTML</span><span>JavaScript</span><span>TypeScript</span><span>React</span><span>Next.js</span><span>Node.js</span><span>Flutter</span><span>Supabase</span><span>Python</span><span>Unity</span><span>Docker</span></div></div></section>
-
-    <section id="pricing" class="section pricing"><div class="section-heading center reveal"><p class="eyebrow"><span></span> Investment</p><h2>A clear path to<br><em>something exceptional.</em></h2><div class="currency-switch" role="group" aria-label="Choose display currency"><button type="button" class="active" data-currency="ngn" aria-pressed="true">₦ Naira</button><button type="button" data-currency="usd" aria-pressed="false">$ US Dollar</button></div></div><div class="price-grid"><article class="price-card reveal"><p>Starter</p><h3>For a strong first impression.</h3><b class="price-amount" data-ngn="From ₦70,000" data-usd="From $51">From ₦70,000</b><ul><li>High-converting landing page</li><li>Custom UI/UX design</li><li>Mobile responsive build</li><li>Analytics setup</li></ul><a href="#contact" class="button button-quiet">Let's talk <span>→</span></a></article><article class="price-card featured reveal"><label>Most popular</label><p>Business</p><h3>For brands ready to grow.</h3><b class="price-amount" data-ngn="From ₦150,000" data-usd="From $99">From ₦150,000</b><ul><li>Multi-page marketing site</li><li>Brand-aligned design system</li><li>CMS & integrations</li><li>SEO and performance foundation</li></ul><a href="#contact" class="button button-primary magnetic">Choose Business <span>→</span></a></article><article class="price-card reveal"><p>Enterprise</p><h3>For digital products with ambition.</h3><b>Let's scope it</b><ul><li>Custom app or platform</li><li>Dedicated product team</li><li>Complex integrations</li><li>Priority ongoing support</li></ul><a href="#contact" class="button button-quiet">Start a conversation <span>→</span></a></article></div></section>
-
-    <section id="faq" class="section faq"><div class="section-heading reveal"><p class="eyebrow"><span></span> Common questions</p><h2>Things you might<br><em>want to know.</em></h2></div><div class="accordion reveal"><details open><summary>How long does development take?<i>+</i></summary><p>A focused landing page often takes 3–5 weeks. More involved products usually land between 8–16 weeks. We’ll give you a transparent, tailored timeline before we begin.</p></details><details><summary>Do you build mobile apps?<i>+</i></summary><p>Yes. We create native-feeling iOS and Android experiences, from strategy and interface design through build, launch, and iteration.</p></details><details><summary>Can you redesign an existing website?<i>+</i></summary><p>Absolutely. We can refresh your visual identity, fix experience gaps, improve performance, or replatform your site without losing what already works.</p></details><details><summary>Do you provide ongoing support?<i>+</i></summary><p>Yes. Our partnerships do not end at launch. We offer flexible support, optimisation, and feature-development retainers.</p></details><details><summary>What industries do you serve?<i>+</i></summary><p>We partner with founders and teams in commerce, education, healthcare, hospitality, finance, gaming, and beyond. Great problems are industry-agnostic.</p></details></div></section>
-
-    <section id="contact" class="contact"><div class="contact-inner"><div class="contact-copy reveal"><p class="eyebrow"><span></span> Your next chapter</p><h2>Let's make something<br><em>worth talking about.</em></h2><p>Tell us what you’re dreaming up. We’ll get back to you within one business day.</p><div class="contact-actions"><a class="btn-3d btn-3d-wa" href="https://wa.me/2349071618499" rel="noopener noreferrer" target="_blank">WhatsApp · 09071618499 <span>↗</span></a><a class="btn-3d btn-3d-mail" href="mailto:info@synqtech.org">Email · info@synqtech.org <span>↗</span></a></div></div><form class="contact-form reveal"><div class="form-row"><label for="name">Name<input id="name" required placeholder="Your name" name="name" autocomplete="name"></label><label for="email">Email<input id="email" required type="email" placeholder="you@company.com" name="email" autocomplete="email"></label></div><div class="form-row"><label for="type">Project type<select id="type" name="type"><option>Website development</option><option>Mobile application</option><option>Brand & UI/UX</option><option>Custom digital product</option></select></label><label for="budget">Budget<select id="budget" name="budget"><option>₦70k – ₦100k</option><option>₦100k – ₦300k</option><option>₦300k+</option></select></label></div><label for="message">Tell us a little more<textarea id="message" name="message" rows="3" placeholder="What would you like to build?"></textarea></label><button class="button button-primary magnetic" type="submit">Send via WhatsApp <span>→</span></button><p class="form-success" aria-live="polite"></p></form></div></section>
-  </main>
-  <footer>
-    <div class="footer-main">
-      <div class="footer-brand-col">
-        <a href="#home" class="brand footer-brand"><img src="assets/synq-logo.png?v=6" alt="SYNQ Technological Services" class="footer-logo"></a>
-        <p>Transforming ideas into<br>digital reality.</p>
-        <div class="footer-cta">
-          <a class="btn-3d btn-3d-sm btn-3d-wa" href="https://wa.me/2349071618499" rel="noopener noreferrer" target="_blank">WhatsApp · 09071618499</a>
-          <a class="btn-3d btn-3d-sm btn-3d-mail" href="mailto:info@synqtech.org">info@synqtech.org</a>
+          <div class="hero__proof reveal" style="--reveal-delay:260ms">
+            <div>
+              <span class="hero__proof-num"><span data-count="4" data-suffix="+">4</span></span>
+            </div>
+            <p class="hero__proof-text">
+              Years building for founders and teams<br>
+              <strong style="color:var(--text)">across Nigeria and beyond</strong>
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="footer-links">
-        <div>
-          <b>Explore</b>
-          <a href="#services">Services</a>
-          <a href="#lab">Lab</a>
-          <a href="#process">Process</a>
-          <a href="#pricing">Pricing</a>
+
+        <div class="hero-visual reveal" style="--reveal-delay:140ms">
+          <canvas class="hero-visual__canvas" data-signal-field aria-hidden="true"></canvas>
+          <div class="hero-visual__ring" aria-hidden="true"></div>
+          <div class="hero-card hero-card--a">
+            <span class="hero-card__label">Frame budget</span>
+            <span class="hero-card__value"><em>16.7</em>ms</span>
+          </div>
+          <div class="hero-card hero-card--b">
+            <span class="hero-card__label">Lighthouse</span>
+            <span class="hero-card__value"><em>98</em>/100</span>
+          </div>
+          <div class="hero-card hero-card--c">
+            <span class="hero-card__label">Runtime dependencies</span>
+            <span class="hero-card__value"><em>0</em></span>
+          </div>
         </div>
-        <div>
-          <b>Company</b>
-          <a href="#why-us">Why us</a>
-          <a href="#testimonials">Stories</a>
-          <a href="#faq">FAQ</a>
-          <a href="#contact">Start a project</a>
-        </div>
-        <div>
-          <b>Follow</b>
-          <a href="under-construction.html">LinkedIn ↗</a>
-          <a href="under-construction.html">Instagram ↗</a>
-          <a href="under-construction.html">Dribbble ↗</a>
-        </div>
-      </div>
-      <div class="newsletter">
-        <b>A little inspiration, occasionally.</b>
-        <p>Product notes and build stories. No spam.</p>
-        <form>
-          <input type="email" required aria-label="Email for newsletter" placeholder="Your email address" autocomplete="email">
-          <button type="submit" aria-label="Subscribe">→</button>
-        </form>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 SYNQ Technological Services. All rights reserved.</span>
-      <a href="#home">Back to top ↑</a>
+  </section>
+
+  <!-- ── Trust strip ──────────────────────────────────────────────────── -->
+  <section class="trust-strip">
+    <div class="shell">
+      <p class="trust-strip__label">How we work</p>
+      <div class="trust-strip__row">
+        <span>Independent studio</span>
+        <span>Lagos, Nigeria</span>
+        <span>Direct access to the builders</span>
+        <span>Replies within one business day</span>
+        <span>Support beyond launch</span>
+      </div>
     </div>
-  </footer>
-  <button class="back-top" aria-label="Back to top">↑</button><script src="script.js?v=3"></script>
-</body></html>
+  </section>
+
+  <!-- ── Intro ────────────────────────────────────────────────────────── -->
+  <section class="section" id="services">
+    <div class="shell">
+      <div class="section-head section-head--split reveal">
+        <div class="stack">
+          <p class="eyebrow">What we do</p>
+          <h2>Built for the ideas that <span class="serif">won't sit still.</span></h2>
+        </div>
+        <p style="color:var(--text-2);line-height:1.75">
+          We are a small, senior team. You work directly with the people designing
+          and writing your product — no account layers, no hand-off gap. That is
+          why our work ships quickly and keeps its shape as it grows.
+        </p>
+      </div>
+
+      <div class="grid grid--3">
+        <article class="service-card reveal">
+          <div class="service-card__icon" aria-hidden="true">◈</div>
+          <h3 class="service-card__title">Websites</h3>
+          <p class="service-card__body">
+            Marketing sites, landing pages and editorial builds engineered for
+            speed, search and conversion — and editable by your team afterwards.
+          </p>
+          <a class="link-arrow" href="services.html">Explore service <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="service-card reveal" style="--reveal-delay:70ms">
+          <div class="service-card__icon" aria-hidden="true">▣</div>
+          <h3 class="service-card__title">Web applications</h3>
+          <p class="service-card__body">
+            Dashboards, portals and internal tools that turn messy operations
+            into something your team can actually move quickly in.
+          </p>
+          <a class="link-arrow" href="services.html">Explore service <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="service-card reveal" style="--reveal-delay:140ms">
+          <div class="service-card__icon" aria-hidden="true">✣</div>
+          <h3 class="service-card__title">Interactive &amp; games</h3>
+          <p class="service-card__body">
+            Playable experiences, campaign mechanics and original games — built
+            on a physics and rendering layer we wrote ourselves.
+          </p>
+          <a class="link-arrow" href="game.html">Play Aether Drift <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Flagship game ────────────────────────────────────────────────── -->
+  <section class="section section--alt">
+    <div class="shell">
+      <div class="section-head">
+        <p class="eyebrow">Flagship project</p>
+        <h2>We didn't just design a game. <span class="serif">We shipped one.</span></h2>
+        <p style="color:var(--text-2);line-height:1.75">
+          Aether Drift is an original 2D platformer built end to end in the studio —
+          custom physics, three biomes, local two-player and an online race mode.
+        </p>
+      </div>
+      <div data-featured-project></div>
+    </div>
+  </section>
+
+  <!-- ── Work preview ─────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="shell">
+      <div class="section-head section-head--split reveal">
+        <div class="stack">
+          <p class="eyebrow">Selected work</p>
+          <h2>Things we've <span class="serif">made recently.</span></h2>
+        </div>
+        <a class="link-arrow" href="portfolio.html">See the full portfolio <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="work-grid" data-work-preview></div>
+    </div>
+  </section>
+
+  <!-- ── Technology marquee ───────────────────────────────────────────── -->
+  <section class="section--tight" style="border-block:1px solid var(--line);background:var(--surface-2)">
+    <div class="shell">
+      <p class="trust-strip__label" style="margin-bottom:var(--sp-5)">Tools we reach for</p>
+    </div>
+    <div class="marquee">
+      <div class="marquee__track" data-marquee>
+        <div>
+          <span class="marquee__item">HTML</span><span class="marquee__item">CSS</span>
+          <span class="marquee__item">JavaScript</span><span class="marquee__item">TypeScript</span>
+          <span class="marquee__item">Canvas</span><span class="marquee__item">WebGL</span>
+          <span class="marquee__item">Web Audio</span><span class="marquee__item">Node.js</span>
+          <span class="marquee__item">WebSockets</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Process ──────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="shell">
+      <div class="section-head reveal">
+        <p class="eyebrow">How we work</p>
+        <h2>Clarity at every <span class="serif">turn.</span></h2>
+        <p style="color:var(--text-2);line-height:1.75">
+          Four stages, no mystery. You always know what is happening, what it
+          costs and what happens next.
+        </p>
+      </div>
+
+      <div class="process-list">
+        <article class="process-step reveal">
+          <span class="process-step__num">01</span>
+          <div><h3 class="process-step__title">Discovery</h3></div>
+          <p class="process-step__text">
+            We learn your world, your audience and what success actually looks
+            like, then turn it into a focused plan with a fixed scope and price.
+          </p>
+        </article>
+        <article class="process-step reveal">
+          <span class="process-step__num">02</span>
+          <div><h3 class="process-step__title">Design</h3></div>
+          <p class="process-step__text">
+            A visual system and interface worth getting excited about — tested
+            against real content, real devices and real accessibility criteria.
+          </p>
+        </article>
+        <article class="process-step reveal">
+          <span class="process-step__num">03</span>
+          <div><h3 class="process-step__title">Build</h3></div>
+          <p class="process-step__text">
+            Engineers bring it to life with scalable, readable code. You get a
+            staging link from week one and see progress continuously.
+          </p>
+        </article>
+        <article class="process-step reveal">
+          <span class="process-step__num">04</span>
+          <div><h3 class="process-step__title">Launch &amp; grow</h3></div>
+          <p class="process-step__text">
+            We test, deploy and stay close — measuring the things that matter
+            and iterating after go-live rather than disappearing.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ──────────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="shell">
+      <div class="cta-band reveal">
+        <div class="cta-band__inner">
+          <p class="eyebrow">Your next chapter</p>
+          <h2 class="cta-band__title">Let's make something <span class="serif">worth talking about.</span></h2>
+          <p class="cta-band__text">
+            Tell us what you're dreaming up. We reply within one business day with
+            an honest view on scope, timeline and cost.
+          </p>
+          <div class="cta-band__actions">
+            <a class="btn btn--invert btn--lg" href="contact.html">
+              Start a project <span class="btn__icon" aria-hidden="true">→</span>
+            </a>
+            <a class="btn btn--ghost btn--lg" style="--btn-fg:#fff;--btn-bg:transparent;border-color:rgb(255 255 255 / .45)"
+               href="portfolio.html">Browse the work</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div data-chrome-footer></div>
+
+<button class="back-top" type="button" data-back-top aria-label="Back to top">↑</button>
+
+<script type="module" src="js/site/main.js"></script>
+</body>
+</html>

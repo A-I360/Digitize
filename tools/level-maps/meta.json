@@ -1,0 +1,152 @@
+[
+  {
+    "id": "first-light",
+    "name": "First Light",
+    "subtitle": "Dawn Cliffs",
+    "biome": "dawn",
+    "par": 55,
+    "hint": "Move with A / D or the arrow keys. Hold jump to go higher.",
+    "width": 100,
+    "height": 20,
+    "entities": [
+      {
+        "t": "walker",
+        "x": 46,
+        "y": 14,
+        "speed": 42
+      },
+      {
+        "t": "pad",
+        "x": 92,
+        "y": 14,
+        "power": 1
+      }
+    ]
+  },
+  {
+    "id": "cloudspire",
+    "name": "Cloudspire",
+    "subtitle": "Sky Ruins",
+    "biome": "sky",
+    "par": 95,
+    "hint": "Ride the moving platforms. Press down on a ledge to drop through it.",
+    "width": 124,
+    "height": 22,
+    "entities": [
+      {
+        "t": "walker",
+        "x": 30,
+        "y": 15,
+        "speed": 54
+      },
+      {
+        "t": "mover",
+        "x": 36,
+        "y": 15,
+        "w": 3,
+        "axis": "x",
+        "dist": 8,
+        "speed": 58
+      },
+      {
+        "t": "walker",
+        "x": 54,
+        "y": 14,
+        "speed": 58
+      },
+      {
+        "t": "drone",
+        "x": 70,
+        "y": 10,
+        "radius": 4,
+        "speed": 0.9
+      },
+      {
+        "t": "mover",
+        "x": 78,
+        "y": 13,
+        "w": 3,
+        "axis": "x",
+        "dist": 8,
+        "speed": 74
+      },
+      {
+        "t": "pad",
+        "x": 100,
+        "y": 13,
+        "power": 1
+      },
+      {
+        "t": "walker",
+        "x": 114,
+        "y": 15,
+        "speed": 66
+      }
+    ]
+  },
+  {
+    "id": "aurora-vault",
+    "name": "Aurora Vault",
+    "subtitle": "The Deep Vault",
+    "biome": "aurora",
+    "par": 125,
+    "hint": "Ride the drifting platforms across the vault. The jump pad on the long gallery hides a shard ledge overhead.",
+    "width": 136,
+    "height": 22,
+    "entities": [
+      {
+        "t": "mover",
+        "x": 36,
+        "y": 15,
+        "w": 3,
+        "dist": 7,
+        "speed": 86
+      },
+      {
+        "t": "drone",
+        "x": 36,
+        "y": 10,
+        "radius": 3,
+        "speed": 1.1
+      },
+      {
+        "t": "walker",
+        "x": 22,
+        "y": 15,
+        "speed": 54
+      },
+      {
+        "t": "walker",
+        "x": 49,
+        "y": 15,
+        "speed": 58
+      },
+      {
+        "t": "walker",
+        "x": 97,
+        "y": 15,
+        "speed": 66
+      },
+      {
+        "t": "pad",
+        "x": 104,
+        "y": 15,
+        "power": 1
+      },
+      {
+        "t": "mover",
+        "x": 119,
+        "y": 15,
+        "w": 2,
+        "dist": 5,
+        "speed": 96
+      },
+      {
+        "t": "walker",
+        "x": 129,
+        "y": 15,
+        "speed": 72
+      }
+    ]
+  }
+]

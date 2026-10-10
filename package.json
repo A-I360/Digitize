@@ -1,0 +1,24 @@
+{
+  "name": "synq-technological-services",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Multi-page site for SYNQ Technological Services, including the original 2D platformer Aether Drift.",
+  "type": "module",
+  "scripts": {
+    "start": "node server/site-server.js",
+    "build": "node tools/build-levels.mjs && node tools/build-sitemap.mjs",
+    "multiplayer": "npm --prefix server run multiplayer",
+    "test": "node tests/run.mjs",
+    "test:levels": "node tests/level-playthrough.mjs",
+    "test:contrast": "node tests/contrast.mjs",
+    "test:dom": "node tests/dom-smoke.mjs",
+    "test:multiplayer": "node tests/multiplayer.mjs",
+    "test:site": "node tests/site.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.2"
+  }
+}

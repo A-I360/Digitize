@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About — SYNQ Technological Services</title>
+<meta name="description" content="SYNQ Technological Services is an independent digital product studio in Lagos building websites, web apps, interactive experiences and games.">
+<link rel="canonical" href="https://synqtech.org/about.html">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SYNQ Technological Services">
+<meta property="og:title" content="About — SYNQ Technological Services">
+<meta property="og:description" content="SYNQ Technological Services is an independent digital product studio in Lagos building websites, web apps, interactive experiences and games.">
+<meta property="og:url" content="https://synqtech.org/about.html">
+<meta property="og:image" content="https://synqtech.org/assets/img/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="About — SYNQ Technological Services">
+<meta name="twitter:description" content="SYNQ Technological Services is an independent digital product studio in Lagos building websites, web apps, interactive experiences and games.">
+<meta name="twitter:image" content="https://synqtech.org/assets/img/og-cover.jpg">
+
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/img/favicon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;700;800&display=swap">
+
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/components.css">
+<link rel="stylesheet" href="styles/site.css">
+<link rel="stylesheet" href="styles/transition.css">
+
+<script>
+/* Inline boot: theme before first paint + the overlay scaffolding.
+   Must stay tiny and dependency-free. Independent timeout failsafes mean no
+   overlay can ever trap the visitor, even if the module bundle fails. */
+(function () {
+  var d = document.documentElement, ls = null, nav = false;
+  try { ls = localStorage.getItem('synq:theme'); } catch (e) {}
+  try { nav = sessionStorage.getItem('synq:navigating') === '1'; sessionStorage.removeItem('synq:navigating'); } catch (e) {}
+  var dark = ls ? ls === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  d.classList.add('js');
+  d.classList.toggle('dark', !!dark);
+  d.classList.toggle('light', !dark);
+  if (nav) d.classList.add('is-route-nav');
+
+  function scaffold() {
+    var b = document.createElement('div');
+    b.className = 'boot-loader'; b.id = 'boot-loader';
+    b.setAttribute('data-boot-loader', '');
+    b.setAttribute('role', 'status');
+    b.setAttribute('aria-live', 'polite');
+    b.setAttribute('aria-label', 'Loading');
+    if (nav) b.hidden = true;
+    b.innerHTML =
+      '<div class="boot-loader__inner">' +
+        '<svg class="boot-mark" viewBox="0 0 100 100" aria-hidden="true"><defs>' +
+          '<linearGradient id="bootStroke" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0" stop-color="#0b5fff"/><stop offset="1" stop-color="#00c8f0"/>' +
+          '</linearGradient></defs>' +
+          '<path class="boot-mark__glow" d="M73 27c-6-8-16-12-25-10C35 19 25 29 23 42c-2 14 4 26 15 32 9 5 19 4 27-1"/>' +
+          '<path class="boot-mark__path" d="M73 27c-6-8-16-12-25-10C35 19 25 29 23 42c-2 14 4 26 15 32 9 5 19 4 27-1"/>' +
+        '</svg>' +
+        '<div class="boot-word">SYNQ<small>DIGITAL STUDIO</small></div>' +
+        '<div class="boot-bar"><div class="boot-bar__fill" data-boot-fill></div></div>' +
+        '<div class="boot-meta"><span>Preparing the studio</span><span data-boot-pct>0%</span></div>' +
+      '</div>';
+    document.body.appendChild(b);
+
+    var v = document.createElement('div');
+    v.className = 'route-veil'; v.id = 'route-veil';
+    v.setAttribute('data-route-veil', '');
+    v.setAttribute('aria-hidden', 'true');
+    v.innerHTML =
+      '<div class="route-veil__panel"></div><div class="route-veil__panel"></div>' +
+      '<div class="route-veil__panel"></div><div class="route-veil__panel"></div>' +
+      '<div class="route-veil__panel"></div>' +
+      '<div class="route-veil__mark"><span>SYNQ</span></div>';
+    document.body.appendChild(v);
+
+    setTimeout(function () {
+      if (!d.classList.contains('is-route-nav')) return;
+      d.classList.remove('is-route-nav');
+      v.classList.remove('is-covering', 'is-busy');
+      v.classList.add('is-revealing');
+    }, 2400);
+    setTimeout(function () {
+      if (b && !b.classList.contains('is-done')) {
+        b.classList.add('is-done');
+        setTimeout(function () { b.hidden = true; }, 460);
+      }
+    }, 3400);
+  }
+
+  if (document.body) scaffold();
+  else document.addEventListener('DOMContentLoaded', scaffold, { once: true });
+})();
+</script>
+</head>
+
+<body id="top" data-page="about">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="fx-grid" aria-hidden="true"></div>
+<div class="fx-aurora" aria-hidden="true"></div>
+
+<noscript>
+  <div class="noscript-nav" role="navigation" aria-label="Navigation">
+    <a href="index.html"><strong>SYNQ</strong></a>
+    <a href="about.html">About</a><a href="services.html">Services</a>
+    <a href="portfolio.html">Work</a><a href="game.html">The Game</a><a href="contact.html">Contact</a>
+  </div>
+</noscript>
+
+<div data-chrome-header></div>
+
+<main id="main" tabindex="-1">
+
+  <section class="page-head">
+    <div class="shell">
+      <div class="page-head__inner">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">About</span>
+        </nav>
+        <p class="eyebrow reveal">Who we are</p>
+        <h1 class="page-head__title reveal" style="--reveal-delay:60ms">
+          A small studio built for <span class="serif">serious work.</span>
+        </h1>
+        <p class="page-head__lede reveal" style="--reveal-delay:110ms">
+          SYNQ Technological Services is an independent digital product studio in Lagos.
+          We design and build websites, web applications, interactive experiences and
+          games — and we stay with them after launch.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="shell">
+      <div class="grid grid--2" style="align-items:start;gap:clamp(2rem,5vw,4rem)">
+        <div class="stack reveal">
+          <h2 style="font-size:1.75rem">The short version</h2>
+          <p style="color:var(--text-2);line-height:1.8">
+            We started in 2022 with a simple frustration: too much digital work looks
+            finished and behaves unfinished. Beautiful on launch day, slow and fragile
+            six months later.
+          </p>
+          <p style="color:var(--text-2);line-height:1.8">
+            So we built the studio around the opposite instinct. Every project gets
+            senior attention, a real engineering foundation, and a hand-over your team
+            can actually operate. We keep the team small on purpose so the people you
+            meet are the people who build.
+          </p>
+          <p style="color:var(--text-2);line-height:1.8">
+            We are comfortable being measured. Our own site scores in the high nineties
+            on Lighthouse, runs with zero runtime dependencies, and ships a playable
+            game we wrote ourselves — because we would rather demonstrate capability
+            than describe it.
+          </p>
+        </div>
+
+        <div class="stack stack--lg reveal" style="--reveal-delay:90ms">
+          <div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+            <div class="stat"><span class="stat__value">2022</span><span class="stat__label">Founded</span></div>
+            <div class="stat"><span class="stat__value">Lagos</span><span class="stat__label">Based in</span></div>
+            <div class="stat"><span class="stat__value">0</span><span class="stat__label">Runtime dependencies</span></div>
+            <div class="stat"><span class="stat__value">1</span><span class="stat__label">Day to first reply</span></div>
+          </div>
+
+          <div class="card card--quiet stack">
+            <p class="eyebrow">Our mission</p>
+            <p style="font-size:1.05rem;line-height:1.7;letter-spacing:-.01em">
+              To make digital products that stay fast, stay maintainable and keep
+              earning their keep — and to hand our clients something they genuinely own.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell">
+      <div class="section-head reveal">
+        <p class="eyebrow">Values</p>
+        <h2>What we hold to.</h2>
+      </div>
+      <div class="value-grid">
+        <article class="card card--hover reveal">
+          <div class="card__icon" aria-hidden="true">◆</div>
+          <h3 class="card__title">Craft over volume</h3>
+          <p class="card__body">We take on fewer projects so each one gets the attention it needs. We would rather do four things well than twelve adequately.</p>
+        </article>
+        <article class="card card--hover reveal" style="--reveal-delay:70ms">
+          <div class="card__icon" aria-hidden="true">◈</div>
+          <h3 class="card__title">Honest estimates</h3>
+          <p class="card__body">Fixed scope, fixed price, stated assumptions. If something changes we say so before it becomes a surprise on an invoice.</p>
+        </article>
+        <article class="card card--hover reveal" style="--reveal-delay:140ms">
+          <div class="card__icon" aria-hidden="true">▣</div>
+          <h3 class="card__title">Built to be maintained</h3>
+          <p class="card__body">Readable code, documented decisions, no lock-in. You should never need us to make a small change — though we hope you will want to.</p>
+        </article>
+        <article class="card card--hover reveal" style="--reveal-delay:210ms">
+          <div class="card__icon" aria-hidden="true">✦</div>
+          <h3 class="card__title">Accessible by default</h3>
+          <p class="card__body">Keyboard paths, focus states, contrast and reduced-motion support are part of the build, not a remediation project later.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-head reveal">
+        <p class="eyebrow">Capabilities</p>
+        <h2>What we can do for you.</h2>
+      </div>
+      <div class="capability-list">
+        <span class="capability">Interface &amp; interaction design</span>
+        <span class="capability">Design systems &amp; tokens</span>
+        <span class="capability">Front-end engineering</span>
+        <span class="capability">Back-end &amp; API development</span>
+        <span class="capability">Headless CMS integration</span>
+        <span class="capability">E-commerce &amp; payments</span>
+        <span class="capability">Realtime &amp; WebSocket systems</span>
+        <span class="capability">Canvas &amp; WebGL experiences</span>
+        <span class="capability">Game design &amp; development</span>
+        <span class="capability">Performance optimisation</span>
+        <span class="capability">Accessibility auditing</span>
+        <span class="capability">Technical SEO foundations</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell">
+      <div class="section-head reveal">
+        <p class="eyebrow">How the work happens</p>
+        <h2>Four stages, no mystery.</h2>
+      </div>
+      <div class="process-list">
+        <article class="process-step reveal">
+          <span class="process-step__num">01</span>
+          <div><h3 class="process-step__title">Discovery</h3></div>
+          <p class="process-step__text">A structured conversation about goals, audience and constraints, ending in a written scope and a fixed price.</p>
+        </article>
+        <article class="process-step reveal">
+          <span class="process-step__num">02</span>
+          <div><h3 class="process-step__title">Design</h3></div>
+          <p class="process-step__text">Visual direction, then interface design in the browser. You review real pages, not flat images.</p>
+        </article>
+        <article class="process-step reveal">
+          <span class="process-step__num">03</span>
+          <div><h3 class="process-step__title">Build</h3></div>
+          <p class="process-step__text">Weekly demos on a live staging URL. Nothing is a surprise at the end because you saw it every week.</p>
+        </article>
+        <article class="process-step reveal">
+          <span class="process-step__num">04</span>
+          <div><h3 class="process-step__title">Launch &amp; grow</h3></div>
+          <p class="process-step__text">Deployment, monitoring, documentation and a support window. Then optional retainers for iteration.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-head reveal">
+        <p class="eyebrow">What clients say</p>
+        <h2>Feedback from the work.</h2>
+      </div>
+
+      <div class="form-status form-status--warn is-visible" style="margin-bottom:var(--sp-5)">
+        <span aria-hidden="true">⚠</span>
+        <span><strong>Sample content.</strong> The quotes below are illustrative placeholders written to demonstrate this section.
+        Replace them in <code>about.html</code> with verified testimonials — with permission, and attributed — or delete the block.</span>
+      </div>
+
+      <div class="quote-grid">
+        <article class="quote reveal">
+          <span class="quote__mark" aria-hidden="true">&rdquo;</span>
+          <div class="quote__stars" aria-label="Rated 5 out of 5">★★★★★</div>
+          <blockquote class="quote__text">Replace this with a real client quote. Keep it specific: what changed for their business, not how nice we were.</blockquote>
+          <footer class="quote__footer">
+            <span class="quote__avatar" aria-hidden="true">—</span>
+            <div><span class="quote__name">Client name</span><span class="quote__role">Role · Company</span></div>
+          </footer>
+        </article>
+        <article class="quote quote--featured reveal" style="--reveal-delay:70ms">
+          <span class="quote__mark" aria-hidden="true">&rdquo;</span>
+          <div class="quote__stars" aria-label="Rated 5 out of 5">★★★★★</div>
+          <blockquote class="quote__text">Replace this with a real client quote. A measurable outcome — revenue, conversion, time saved — reads far better than praise.</blockquote>
+          <footer class="quote__footer">
+            <span class="quote__avatar" aria-hidden="true">—</span>
+            <div><span class="quote__name">Client name</span><span class="quote__role">Role · Company</span></div>
+          </footer>
+        </article>
+        <article class="quote reveal" style="--reveal-delay:140ms">
+          <span class="quote__mark" aria-hidden="true">&rdquo;</span>
+          <div class="quote__stars" aria-label="Rated 5 out of 5">★★★★★</div>
+          <blockquote class="quote__text">Replace this with a real client quote. Short, concrete lines land hardest on a portfolio page.</blockquote>
+          <footer class="quote__footer">
+            <span class="quote__avatar" aria-hidden="true">—</span>
+            <div><span class="quote__name">Client name</span><span class="quote__role">Role · Company</span></div>
+          </footer>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="cta-band reveal">
+        <div class="cta-band__inner">
+          <p class="eyebrow">Work with us</p>
+          <h2 class="cta-band__title">Tell us what you're <span class="serif">building.</span></h2>
+          <p class="cta-band__text">We reply within one business day, and we will tell you honestly if we are not the right studio for the job.</p>
+          <div class="cta-band__actions">
+            <a class="btn btn--invert btn--lg" href="contact.html">Start a project <span class="btn__icon" aria-hidden="true">→</span></a>
+            <a class="btn btn--ghost btn--lg" style="--btn-fg:#fff;--btn-bg:transparent;border-color:rgb(255 255 255 / .45)" href="portfolio.html">See the work first</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div data-chrome-footer></div>
+
+<button class="back-top" type="button" data-back-top aria-label="Back to top">&uarr;</button>
+
+<script type="module" src="js/site/main.js"></script>
+
+</body>
+</html>

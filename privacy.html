@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy policy — SYNQ Technological Services</title>
+<meta name="description" content="How SYNQ Technological Services collects, uses and stores information when you use this website.">
+<link rel="canonical" href="https://synqtech.org/privacy.html">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SYNQ Technological Services">
+<meta property="og:title" content="Privacy policy — SYNQ Technological Services">
+<meta property="og:description" content="How SYNQ Technological Services collects, uses and stores information when you use this website.">
+<meta property="og:url" content="https://synqtech.org/privacy.html">
+<meta property="og:image" content="https://synqtech.org/assets/img/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Privacy policy — SYNQ Technological Services">
+<meta name="twitter:description" content="How SYNQ Technological Services collects, uses and stores information when you use this website.">
+<meta name="twitter:image" content="https://synqtech.org/assets/img/og-cover.jpg">
+
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/img/favicon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;700;800&display=swap">
+
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/components.css">
+<link rel="stylesheet" href="styles/site.css">
+<link rel="stylesheet" href="styles/transition.css">
+
+<script>
+/* Inline boot: theme before first paint + the overlay scaffolding.
+   Must stay tiny and dependency-free. Independent timeout failsafes mean no
+   overlay can ever trap the visitor, even if the module bundle fails. */
+(function () {
+  var d = document.documentElement, ls = null, nav = false;
+  try { ls = localStorage.getItem('synq:theme'); } catch (e) {}
+  try { nav = sessionStorage.getItem('synq:navigating') === '1'; sessionStorage.removeItem('synq:navigating'); } catch (e) {}
+  var dark = ls ? ls === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  d.classList.add('js');
+  d.classList.toggle('dark', !!dark);
+  d.classList.toggle('light', !dark);
+  if (nav) d.classList.add('is-route-nav');
+
+  function scaffold() {
+    var b = document.createElement('div');
+    b.className = 'boot-loader'; b.id = 'boot-loader';
+    b.setAttribute('data-boot-loader', '');
+    b.setAttribute('role', 'status');
+    b.setAttribute('aria-live', 'polite');
+    b.setAttribute('aria-label', 'Loading');
+    if (nav) b.hidden = true;
+    b.innerHTML =
+      '<div class="boot-loader__inner">' +
+        '<svg class="boot-mark" viewBox="0 0 100 100" aria-hidden="true"><defs>' +
+          '<linearGradient id="bootStroke" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0" stop-color="#0b5fff"/><stop offset="1" stop-color="#00c8f0"/>' +
+          '</linearGradient></defs>' +
+          '<path class="boot-mark__glow" d="M73 27c-6-8-16-12-25-10C35 19 25 29 23 42c-2 14 4 26 15 32 9 5 19 4 27-1"/>' +
+          '<path class="boot-mark__path" d="M73 27c-6-8-16-12-25-10C35 19 25 29 23 42c-2 14 4 26 15 32 9 5 19 4 27-1"/>' +
+        '</svg>' +
+        '<div class="boot-word">SYNQ<small>DIGITAL STUDIO</small></div>' +
+        '<div class="boot-bar"><div class="boot-bar__fill" data-boot-fill></div></div>' +
+        '<div class="boot-meta"><span>Preparing the studio</span><span data-boot-pct>0%</span></div>' +
+      '</div>';
+    document.body.appendChild(b);
+
+    var v = document.createElement('div');
+    v.className = 'route-veil'; v.id = 'route-veil';
+    v.setAttribute('data-route-veil', '');
+    v.setAttribute('aria-hidden', 'true');
+    v.innerHTML =
+      '<div class="route-veil__panel"></div><div class="route-veil__panel"></div>' +
+      '<div class="route-veil__panel"></div><div class="route-veil__panel"></div>' +
+      '<div class="route-veil__panel"></div>' +
+      '<div class="route-veil__mark"><span>SYNQ</span></div>';
+    document.body.appendChild(v);
+
+    setTimeout(function () {
+      if (!d.classList.contains('is-route-nav')) return;
+      d.classList.remove('is-route-nav');
+      v.classList.remove('is-covering', 'is-busy');
+      v.classList.add('is-revealing');
+    }, 2400);
+    setTimeout(function () {
+      if (b && !b.classList.contains('is-done')) {
+        b.classList.add('is-done');
+        setTimeout(function () { b.hidden = true; }, 460);
+      }
+    }, 3400);
+  }
+
+  if (document.body) scaffold();
+  else document.addEventListener('DOMContentLoaded', scaffold, { once: true });
+})();
+</script>
+</head>
+
+<body id="top" data-page="privacy">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="fx-grid" aria-hidden="true"></div>
+<div class="fx-aurora" aria-hidden="true"></div>
+
+<noscript>
+  <div class="noscript-nav" role="navigation" aria-label="Navigation">
+    <a href="index.html"><strong>SYNQ</strong></a>
+    <a href="about.html">About</a><a href="services.html">Services</a>
+    <a href="portfolio.html">Work</a><a href="game.html">The Game</a><a href="contact.html">Contact</a>
+  </div>
+</noscript>
+
+<div data-chrome-header></div>
+
+<main id="main" tabindex="-1">
+
+  <section class="page-head">
+    <div class="shell">
+      <div class="page-head__inner">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Privacy</span>
+        </nav>
+        <p class="eyebrow reveal">Legal</p>
+        <h1 class="page-head__title reveal" style="--reveal-delay:60ms">Privacy policy</h1>
+        <p class="page-head__lede reveal" style="--reveal-delay:110ms">
+          How SYNQ Technological Services handles your information. Last updated 10 October 2026.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="shell">
+      <div class="prose">
+        <p>
+          This policy explains what we collect when you use this website, why we collect
+          it, and what we do with it. It is written to be read rather than to be
+          reassuring.
+        </p>
+
+        <div class="form-status form-status--warn is-visible">
+          <span aria-hidden="true">⚠</span>
+          <span>
+            <strong>Template notice.</strong> This document is a starting point and is not
+            legal advice. Have it reviewed against the Nigeria Data Protection Act and any
+            other regime that applies to you before you rely on it.
+          </span>
+        </div>
+
+        <h2>What we collect</h2>
+        <p>
+          Two kinds of information reach us when you use this site.
+        </p>
+        <h3>Information you send us</h3>
+        <p>
+          If you complete the contact form we receive the name, email address, project
+          type, budget range and message you enter. We use it only to reply to your
+          enquiry and, if we work together, to run the project.
+        </p>
+        <h3>Information collected automatically</h3>
+        <p>
+          Like most websites, this one is served by a host that records standard request
+          logs — IP address, user agent, pages requested and timestamps. We use this to
+          keep the site working and to understand which pages are useful. We do not
+          build advertising profiles from it.
+        </p>
+
+        <h2>What is stored in your browser</h2>
+        <p>
+          We keep a small number of preferences in your browser's local storage so the
+          site behaves consistently between visits:
+        </p>
+        <ul>
+          <li>your chosen light or dark theme</li>
+          <li>your chosen display currency on the services page</li>
+          <li>sound and music settings for the game on the game page</li>
+        </ul>
+        <p>
+          None of these identify you, none are sent to a server, and you can clear them
+          at any time through your browser settings. This site sets no advertising or
+          cross-site tracking cookies.
+        </p>
+
+        <h2>What we do not do</h2>
+        <ul>
+          <li>We do not sell or rent your information.</li>
+          <li>We do not run third-party advertising trackers on this site.</li>
+          <li>We do not add you to a mailing list because you sent us an enquiry.</li>
+          <li>We do not share your details with anyone outside the studio except a service provider strictly needed to deliver your project, and only with your knowledge.</li>
+        </ul>
+
+        <h2>Third-party services</h2>
+        <p>
+          Fonts on this site are served by Google Fonts, which means Google receives a
+          request from your browser when a page loads. If you would rather avoid that,
+          self-hosting the font files is a small change we can make.
+        </p>
+        <p>
+          The contact form is delivered through whatever endpoint is configured for this
+          deployment. At the time of writing no email backend is connected, so enquiries
+          are handed off through WhatsApp or email, which are governed by their own
+          providers' policies.
+        </p>
+
+        <h2>How long we keep things</h2>
+        <p>
+          Enquiries are kept for as long as they are useful — typically two years — and
+          then deleted. Project records are kept for the period required by our contract
+          with you and by Nigerian tax law.
+        </p>
+
+        <h2>Your rights</h2>
+        <p>
+          You can ask us what we hold about you, ask for it to be corrected, or ask for
+          it to be deleted. Write to
+          <a href="mailto:info@synqtech.org">info@synqtech.org</a> and we will respond
+          within thirty days.
+        </p>
+
+        <h2>Changes</h2>
+        <p>
+          If this policy changes in a way that affects you, we will update the date at
+          the top of this page and, where the change is significant, say so on the site.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          SYNQ Technological Services, Lagos, Nigeria.
+          <a href="mailto:info@synqtech.org">info@synqtech.org</a> ·
+          <a href="https://wa.me/2349071618499" target="_blank" rel="noopener noreferrer">09071618499</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div data-chrome-footer></div>
+
+<button class="back-top" type="button" data-back-top aria-label="Back to top">&uarr;</button>
+
+<script type="module" src="js/site/main.js"></script>
+
+</body>
+</html>

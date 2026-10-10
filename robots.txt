@@ -1,0 +1,13 @@
+# SYNQ Technological Services
+# https://synqtech.org
+
+User-agent: *
+Allow: /
+
+# Nothing private here, but these add nothing to a search result.
+Disallow: /server/
+Disallow: /tools/
+Disallow: /tests/
+Disallow: /node_modules/
+
+Sitemap: https://synqtech.org/sitemap.xml

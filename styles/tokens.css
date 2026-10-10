@@ -1,0 +1,147 @@
+/* ==========================================================================
+   SYNQ — Design tokens
+   Single source of truth for colour, type, space, motion and elevation.
+   The light palette is the default; `html.dark` re-maps the same variable
+   names so every component is theme-aware without a single extra rule.
+   ========================================================================== */
+
+:root {
+  /* ---- Brand ---------------------------------------------------------- */
+  --brand-900: #05217a;
+  --brand-700: #0847c4;
+  --brand: #0b5fff;
+  --brand-400: #4d8bff;
+  --brand-300: #8fb6ff;
+  --cyan: #00c8f0;
+  --cyan-300: #5ee0ff;
+  --violet: #7c5cff;
+  --amber: #ffb02e;
+  /* Status colours are chosen for contrast, not just hue: both clear 4.5:1
+     against the light surfaces they are used on. */
+  --mint: #0a7d5b;
+  --danger: #c62a30;
+
+  /* ---- Semantic: light ------------------------------------------------ */
+  --bg: #ffffff;
+  --bg-alt: #f6f8fc;
+  --surface: #ffffff;
+  --surface-2: #f4f7fd;
+  --surface-3: #eaf0fa;
+  --surface-invert: #0b1220;
+  --line: #e2e8f3;
+  --line-strong: #cdd8ea;
+  --text: #0d1526;
+  --text-2: #4a5568;
+  --text-3: #6b7688;
+  --link: var(--brand);
+  --accent: var(--brand);
+  --accent-2: var(--cyan);
+  --on-accent: #ffffff;
+  --overlay: rgba(9, 16, 32, 0.55);
+  --glass: rgba(255, 255, 255, 0.82);
+  --glass-line: rgba(255, 255, 255, 0.6);
+  --shadow-color: 12 28 82;
+  --grid-line: rgba(11, 95, 255, 0.045);
+  --logo-blend: multiply;
+
+  /* ---- Type ----------------------------------------------------------- */
+  --font-sans: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-serif: Georgia, "Times New Roman", serif;
+
+  --fs-display: clamp(2.75rem, 6.2vw, 5rem);
+  --fs-h1: clamp(2.5rem, 5vw, 4.25rem);
+  --fs-h2: clamp(2rem, 3.7vw, 3.375rem);
+  --fs-h3: clamp(1.25rem, 1.6vw, 1.625rem);
+  --fs-h4: 1.0625rem;
+  --fs-body-lg: clamp(1rem, 1.15vw, 1.125rem);
+  --fs-body: 0.9375rem;
+  --fs-sm: 0.8125rem;
+  --fs-xs: 0.6875rem;
+
+  --tracking-display: -0.045em;
+  --tracking-tight: -0.022em;
+  --tracking-label: 0.12em;
+
+  /* ---- Space (4px base) ----------------------------------------------- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  --sp-9: 6rem;
+  --sp-10: 8rem;
+
+  --section-y: clamp(4.5rem, 9vw, 8rem);
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --maxw: 1200px;
+  --maxw-wide: 1360px;
+  --maxw-prose: 68ch;
+
+  /* ---- Radius --------------------------------------------------------- */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-pill: 999px;
+
+  /* ---- Elevation ------------------------------------------------------ */
+  --sh-xs: 0 1px 2px rgb(var(--shadow-color) / 0.06);
+  --sh-sm: 0 4px 14px rgb(var(--shadow-color) / 0.07);
+  --sh-md: 0 14px 34px rgb(var(--shadow-color) / 0.09);
+  --sh-lg: 0 30px 70px rgb(var(--shadow-color) / 0.14);
+  --sh-glow: 0 18px 40px rgb(11 95 255 / 0.28);
+
+  /* ---- Motion --------------------------------------------------------- */
+  --e-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --e-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --e-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-fast: 140ms;
+  --t-base: 260ms;
+  --t-slow: 520ms;
+
+  /* ---- Layers --------------------------------------------------------- */
+  --z-grid: 0;
+  --z-content: 1;
+  --z-nav: 60;
+  --z-overlay: 90;
+  --z-transition: 120;
+
+  --nav-h: 68px;
+  --nav-offset: 14px;
+  --focus-ring: var(--brand);
+  color-scheme: light;
+}
+
+html.dark {
+  --bg: #080d18;
+  --bg-alt: #0d1525;
+  --surface: #111b2d;
+  --surface-2: #16223a;
+  --surface-3: #1c2942;
+  --surface-invert: #f2f6fd;
+  --line: #253250;
+  --line-strong: #33456b;
+  --text: #f2f6fd;
+  --text-2: #b6c2d6;
+  --text-3: #93a1b8;
+  --link: var(--brand-400);
+  --accent: var(--brand-400);
+  --accent-2: var(--cyan-300);
+  --on-accent: #05122e;
+  /* Dark mode needs the brighter end of each status ramp. */
+  --mint: #4fe3b0;
+  --danger: #ff8388;
+  --overlay: rgba(2, 6, 16, 0.68);
+  --glass: rgba(12, 20, 36, 0.78);
+  --glass-line: rgba(255, 255, 255, 0.08);
+  --shadow-color: 0 4 16;
+  --grid-line: rgba(94, 224, 255, 0.055);
+  --logo-blend: lighten;
+  --focus-ring: var(--cyan-300);
+  color-scheme: dark;
+}

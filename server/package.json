@@ -1,0 +1,16 @@
+{
+  "name": "synq-servers",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Optional backend for the SYNQ site: online multiplayer rooms and a contact-form endpoint.",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "multiplayer": "node multiplayer-server.js",
+    "site": "node site-server.js",
+    "start": "node site-server.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

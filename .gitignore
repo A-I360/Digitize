@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Local-only server data (contact enquiries, logs)
+server/data/
+*.log
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp

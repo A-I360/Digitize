@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aether Drift — a playable 2D platformer by SYNQ Technological Services</title>
+<meta name="description" content="Aether Drift is an original 2D platformer built by SYNQ Technological Services. Play three hand-built levels solo, or two-player on one device.">
+<link rel="canonical" href="https://synqtech.org/game.html">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SYNQ Technological Services">
+<meta property="og:title" content="Aether Drift — a playable 2D platformer by SYNQ Technological Services">
+<meta property="og:description" content="Aether Drift is an original 2D platformer built by SYNQ Technological Services. Play three hand-built levels solo, or two-player on one device.">
+<meta property="og:url" content="https://synqtech.org/game.html">
+<meta property="og:image" content="https://synqtech.org/assets/img/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aether Drift — a playable 2D platformer by SYNQ Technological Services">
+<meta name="twitter:description" content="Aether Drift is an original 2D platformer built by SYNQ Technological Services. Play three hand-built levels solo, or two-player on one device.">
+<meta name="twitter:image" content="https://synqtech.org/assets/img/og-cover.jpg">
+
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/img/favicon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;700;800&display=swap">
+
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/components.css">
+<link rel="stylesheet" href="styles/site.css">
+<link rel="stylesheet" href="styles/transition.css">
+<link rel="stylesheet" href="styles/game.css">
+<script>
+/* Inline boot: theme before first paint + the overlay scaffolding.
+   Must stay tiny and dependency-free. Independent timeout failsafes mean no
+   overlay can ever trap the visitor, even if the module bundle fails. */
+(function () {
+  var d = document.documentElement, ls = null, nav = false;
+  try { ls = localStorage.getItem('synq:theme'); } catch (e) {}
+  try { nav = sessionStorage.getItem('synq:navigating') === '1'; sessionStorage.removeItem('synq:navigating'); } catch (e) {}
+  var dark = ls ? ls === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  d.classList.add('js');
+  d.classList.toggle('dark', !!dark);
+  d.classList.toggle('light', !dark);
+  if (nav) d.classList.add('is-route-nav');
+
+  function scaffold() {
+    var b = document.createElement('div');
+    b.className = 'boot-loader'; b.id = 'boot-loader';
+    b.setAttribute('data-boot-loader', '');
+    b.setAttribute('role', 'status');
+    b.setAttribute('aria-live', 'polite');
+    b.setAttribute('aria-label', 'Loading');
+    if (nav) b.hidden = true;
+    b.innerHTML =
+      '<div class="boot-loader__inner">' +
+        '<svg class="boot-mark" viewBox="0 0 100 100" aria-hidden="true"><defs>' +
+          '<linearGradient id="bootStroke" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0" stop-color="#0b5fff"/><stop offset="1" stop-color="#00c8f0"/>' +
+          '</linearGradient></defs>' +
+          '<path class="boot-mark__glow" d="M73 27c-6-8-16-12-25-10C35 19 25 29 23 42c-2 14 4 26 15 32 9 5 19 4 27-1"/>' +
+          '<path class="boot-mark__path" d="M73 27c-6-8-16-12-25-10C35 19 25 29 23 42c-2 14 4 26 15 32 9 5 19 4 27-1"/>' +
+        '</svg>' +
+        '<div class="boot-word">SYNQ<small>DIGITAL STUDIO</small></div>' +
+        '<div class="boot-bar"><div class="boot-bar__fill" data-boot-fill></div></div>' +
+        '<div class="boot-meta"><span>Preparing the studio</span><span data-boot-pct>0%</span></div>' +
+      '</div>';
+    document.body.appendChild(b);
+
+    var v = document.createElement('div');
+    v.className = 'route-veil'; v.id = 'route-veil';
+    v.setAttribute('data-route-veil', '');
+    v.setAttribute('aria-hidden', 'true');
+    v.innerHTML =
+      '<div class="route-veil__panel"></div><div class="route-veil__panel"></div>' +
+      '<div class="route-veil__panel"></div><div class="route-veil__panel"></div>' +
+      '<div class="route-veil__panel"></div>' +
+      '<div class="route-veil__mark"><span>SYNQ</span></div>';
+    document.body.appendChild(v);
+
+    setTimeout(function () {
+      if (!d.classList.contains('is-route-nav')) return;
+      d.classList.remove('is-route-nav');
+      v.classList.remove('is-covering', 'is-busy');
+      v.classList.add('is-revealing');
+    }, 2400);
+    setTimeout(function () {
+      if (b && !b.classList.contains('is-done')) {
+        b.classList.add('is-done');
+        setTimeout(function () { b.hidden = true; }, 460);
+      }
+    }, 3400);
+  }
+
+  if (document.body) scaffold();
+  else document.addEventListener('DOMContentLoaded', scaffold, { once: true });
+})();
+</script>
+</head>
+
+<body id="top" data-page="game">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="fx-grid" aria-hidden="true"></div>
+<div class="fx-aurora" aria-hidden="true"></div>
+
+<noscript>
+  <div class="noscript-nav" role="navigation" aria-label="Navigation">
+    <a href="index.html"><strong>SYNQ</strong></a>
+    <a href="about.html">About</a><a href="services.html">Services</a>
+    <a href="portfolio.html">Work</a><a href="game.html">The Game</a><a href="contact.html">Contact</a>
+  </div>
+</noscript>
+
+<div data-chrome-header></div>
+
+<main id="main" tabindex="-1">
+
+  <section class="page-head" style="padding-bottom:clamp(1rem,2vw,1.75rem)">
+    <div class="shell">
+      <div class="page-head__inner">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a><span aria-hidden="true">/</span>
+          <a href="portfolio.html">Work</a><span aria-hidden="true">/</span>
+          <span aria-current="page">Aether Drift</span>
+        </nav>
+        <p class="eyebrow reveal">Playable project</p>
+        <h1 class="page-head__title reveal" style="--reveal-delay:60ms">
+          Aether Drift — <span class="serif">play it here.</span>
+        </h1>
+        <p class="page-head__lede reveal" style="--reveal-delay:110ms">
+          Not a screenshot, a video or a mock-up: this is the actual game, running
+          in the page. Three hand-built levels, original art, custom physics, and
+          two-player on the same device.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" style="padding-top:0">
+    <div class="shell shell--wide">
+      <div class="game-shell">
+
+        <div class="game-stage" data-game-stage>
+          <canvas class="game-canvas" data-game-canvas aria-label="Aether Drift game viewport" role="img"></canvas>
+
+          <!-- In-game controls -->
+          <div class="game-hud-buttons" data-hud-buttons hidden>
+            <button type="button" data-action="sound" aria-label="Mute or unmute sound" title="Sound">&#9834;</button>
+            <button type="button" data-action="fullscreen" aria-label="Toggle fullscreen" title="Fullscreen">&#9974;</button>
+            <button type="button" data-action="pause" aria-label="Pause game" title="Pause">&#10073;&#10073;</button>
+          </div>
+
+          <!-- Title -->
+          <div class="game-overlay" data-overlay="title">
+            <div class="game-panel">
+              <p class="game-subtitle">An original 2D platformer by SYNQ</p>
+              <h2 class="game-title">Aether Drift</h2>
+              <p class="game-lede">
+                Cross the sky islands, gather aether shards and reach the portal.
+                Built from scratch — engine, art and sound.
+              </p>
+              <div class="game-menu">
+                <button class="game-btn game-btn--primary" type="button" data-action="play-solo">
+                  Play solo <span class="game-btn__hint">3 levels</span>
+                </button>
+                <button class="game-btn" type="button" data-action="open-modes">
+                  Multiplayer <span class="game-btn__hint">local &amp; online</span>
+                </button>
+                <button class="game-btn" type="button" data-action="open-levels">
+                  Level select <span class="game-btn__hint">replay any stage</span>
+                </button>
+                <button class="game-btn game-btn--ghost" type="button" data-action="open-settings">
+                  Settings <span class="game-btn__hint">sound &amp; quality</span>
+                </button>
+                <button class="game-btn game-btn--ghost" type="button" data-action="open-credits">
+                  Credits <span class="game-btn__hint">who made this</span>
+                </button>
+              </div>
+              <p style="font-family:var(--font-mono);font-size:.625rem;letter-spacing:.14em;color:#6f809c">
+                KEYBOARD OR TOUCH · ESC TO PAUSE
+              </p>
+            </div>
+          </div>
+
+          <!-- Mode select -->
+          <div class="game-overlay" data-overlay="modes" hidden>
+            <div class="game-panel game-panel--wide">
+              <p class="game-subtitle">Multiplayer</p>
+              <h2 style="font-size:clamp(1.5rem,3.5vw,2.25rem)">How do you want to play?</h2>
+              <div class="game-menu" style="width:min(430px,100%)">
+                <button class="game-btn game-btn--primary" type="button" data-action="play-local">
+                  Local two-player <span class="game-btn__hint">one device · always works</span>
+                </button>
+                <button class="game-btn" type="button" data-action="host-online">
+                  Create an online room <span class="game-btn__hint" data-online-hint>needs server</span>
+                </button>
+                <button class="game-btn" type="button" data-action="join-online">
+                  Join with a room code <span class="game-btn__hint" data-online-hint>needs server</span>
+                </button>
+                <button class="game-btn game-btn--ghost" type="button" data-action="back-title">Back</button>
+              </div>
+              <p data-online-note style="font-size:var(--fs-xs);color:#93a6c8;max-width:48ch;line-height:1.7"></p>
+            </div>
+          </div>
+
+          <!-- Level select -->
+          <div class="game-overlay" data-overlay="levels" hidden>
+            <div class="game-panel game-panel--wide">
+              <p class="game-subtitle">Level select</p>
+              <h2 style="font-size:clamp(1.5rem,3.5vw,2.25rem)">Pick a stage.</h2>
+              <div class="level-grid" data-level-grid></div>
+              <button class="game-btn game-btn--ghost" style="width:min(260px,100%)" type="button" data-action="back-title">Back</button>
+            </div>
+          </div>
+
+          <!-- Nickname / room entry -->
+          <div class="game-overlay" data-overlay="setup" hidden>
+            <div class="game-panel">
+              <p class="game-subtitle" data-setup-title>Online race</p>
+              <h2 style="font-size:clamp(1.35rem,3vw,2rem)" data-setup-heading>Create a room</h2>
+              <div class="lobby">
+                <label class="setting" style="flex-direction:column;align-items:flex-start;gap:.35rem">
+                  <span>Nickname</span>
+                  <input class="lobby__input" style="width:100%;text-transform:none;letter-spacing:normal"
+                         type="text" maxlength="14" value="Player" data-nickname>
+                </label>
+                <div class="lobby__row" data-code-row hidden>
+                  <input class="lobby__input" type="text" maxlength="6" placeholder="CODE" data-room-code
+                         aria-label="Room code" autocomplete="off" spellcheck="false">
+                </div>
+                <label class="setting" style="gap:.75rem">
+                  <span>Character</span>
+                  <select class="select" data-skin style="width:auto;min-width:150px">
+                    <option value="0">Drift — blue</option>
+                    <option value="1">Ember — rose</option>
+                    <option value="2">Moss — green</option>
+                    <option value="3">Violet — purple</option>
+                  </select>
+                </label>
+                <div class="lobby__row">
+                  <button class="game-btn game-btn--primary" type="button" data-action="confirm-setup">Continue</button>
+                  <button class="game-btn game-btn--ghost" type="button" data-action="back-modes">Back</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Online lobby -->
+          <div class="game-overlay" data-overlay="lobby" hidden>
+            <div class="game-panel">
+              <p class="game-subtitle">Lobby</p>
+              <div class="lobby">
+                <div class="room-code">
+                  <span class="room-code__label">Room code</span>
+                  <span class="room-code__value" data-room-code-out>------</span>
+                </div>
+                <div class="player-list" data-player-list></div>
+                <p data-lobby-status style="font-size:var(--fs-xs);color:#93a6c8;line-height:1.7"></p>
+                <div class="lobby__row">
+                  <button class="game-btn game-btn--primary" type="button" data-action="start-match" disabled>
+                    Start match
+                  </button>
+                  <button class="game-btn game-btn--ghost" type="button" data-action="leave-room">Leave</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pause -->
+          <div class="game-overlay game-overlay--bare" data-overlay="pause" hidden>
+            <div class="game-panel">
+              <p class="game-subtitle">Paused</p>
+              <h2 style="font-size:clamp(1.5rem,3vw,2.25rem)">Take a breath.</h2>
+              <div class="game-menu">
+                <button class="game-btn game-btn--primary" type="button" data-action="resume">Resume</button>
+                <button class="game-btn" type="button" data-action="restart">Restart level</button>
+                <button class="game-btn game-btn--ghost" type="button" data-action="open-settings">Settings</button>
+                <button class="game-btn game-btn--ghost" type="button" data-action="quit-to-title">Quit to menu</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Settings -->
+          <div class="game-overlay game-overlay--bare" data-overlay="settings" hidden>
+            <div class="game-panel">
+              <p class="game-subtitle">Settings</p>
+              <h2 style="font-size:clamp(1.35rem,3vw,2rem)">Sound &amp; performance</h2>
+              <div class="settings-list">
+                <label class="setting">
+                  <span>Sound effects</span>
+                  <input type="checkbox" data-setting="sfx" checked>
+                </label>
+                <label class="setting">
+                  <span>Effects volume</span>
+                  <input type="range" min="0" max="100" value="70" data-setting="sfxVolume">
+                </label>
+                <label class="setting">
+                  <span>Music</span>
+                  <input type="checkbox" data-setting="music">
+                </label>
+                <label class="setting">
+                  <span>Music volume</span>
+                  <input type="range" min="0" max="100" value="35" data-setting="musicVolume">
+                </label>
+                <label class="setting">
+                  <span>Visual quality</span>
+                  <select class="select" data-setting="quality" style="width:auto;min-width:120px">
+                    <option value="auto">Auto</option>
+                    <option value="low">Low</option>
+                    <option value="mid">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </label>
+                <label class="setting">
+                  <span>Show touch controls</span>
+                  <input type="checkbox" data-setting="touch">
+                </label>
+              </div>
+              <button class="game-btn game-btn--ghost" style="width:min(240px,100%)" type="button" data-action="close-settings">Done</button>
+            </div>
+          </div>
+
+          <!-- Level complete -->
+          <div class="game-overlay game-overlay--bare" data-overlay="complete" hidden>
+            <div class="game-panel">
+              <p class="game-subtitle">Level complete</p>
+              <h2 style="font-size:clamp(1.5rem,3.5vw,2.5rem)" data-complete-title>Stage cleared.</h2>
+              <div class="stat-row" style="justify-content:center">
+                <div class="stat" style="min-width:120px;background:rgba(10,20,44,.8);border-color:rgba(143,233,255,.25)">
+                  <span class="stat__value" data-complete-time>0:00</span>
+                  <span class="stat__label">Your time</span>
+                </div>
+                <div class="stat" style="min-width:120px;background:rgba(10,20,44,.8);border-color:rgba(143,233,255,.25)">
+                  <span class="stat__value" data-complete-shards>0</span>
+                  <span class="stat__label">Shards</span>
+                </div>
+              </div>
+              <p class="game-lede" data-complete-note></p>
+              <div class="game-menu">
+                <button class="game-btn game-btn--primary" type="button" data-action="next-level">Next level</button>
+                <button class="game-btn" type="button" data-action="restart">Replay level</button>
+                <button class="game-btn game-btn--ghost" type="button" data-action="quit-to-title">Back to menu</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Run complete -->
+          <div class="game-overlay" data-overlay="run-complete" hidden>
+            <div class="game-panel">
+              <p class="game-subtitle">Run complete</p>
+              <h2 class="game-title" style="font-size:clamp(2rem,5vw,3rem)">Vault reached.</h2>
+              <p class="game-lede" data-run-note>
+                You finished all three stages. That is the whole game — for now.
+              </p>
+              <div class="game-menu">
+                <button class="game-btn game-btn--primary" type="button" data-action="quit-to-title">Play again</button>
+                <a class="game-btn game-btn--ghost" href="project.html?slug=aether-drift">Read the case study</a>
+                <a class="game-btn game-btn--ghost" href="portfolio.html">Back to the portfolio</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Credits -->
+          <div class="game-overlay game-overlay--bare" data-overlay="credits" hidden>
+            <div class="game-panel game-panel--wide">
+              <p class="game-subtitle">Credits</p>
+              <h2 style="font-size:clamp(1.35rem,3vw,2rem)">Made at SYNQ Technological Services</h2>
+              <div class="feature-list" style="text-align:left">
+                <span class="feature-item" style="color:#b6c6e0">Design, engineering, art direction and audio produced in-house.</span>
+                <span class="feature-item" style="color:#b6c6e0">Custom physics, rendering and networking layers — no game engine.</span>
+                <span class="feature-item" style="color:#b6c6e0">All visuals drawn procedurally at runtime; no image assets.</span>
+                <span class="feature-item" style="color:#b6c6e0">Soundtrack and effects synthesised live with the Web Audio API.</span>
+                <span class="feature-item" style="color:#b6c6e0">Original characters and world. No third-party or licensed art.</span>
+                <span class="feature-item" style="color:#b6c6e0">Built for the web: keyboard, touch and reduced-motion aware.</span>
+              </div>
+              <button class="game-btn game-btn--ghost" style="width:min(240px,100%)" type="button" data-action="back-title">Back</button>
+            </div>
+          </div>
+
+          <div class="game-toast" data-toast role="status" aria-live="polite"></div>
+        </div>
+
+        <!-- Touch controls -->
+        <div class="game-touch" data-touch-root aria-hidden="true">
+          <div class="game-touch__cluster">
+            <button class="touch-btn" type="button" data-touch="left" aria-label="Move left">&#8592;</button>
+            <button class="touch-btn" type="button" data-touch="right" aria-label="Move right">&#8594;</button>
+            <button class="touch-btn" type="button" data-touch="down" aria-label="Drop down">&#8595;</button>
+          </div>
+          <button class="touch-btn touch-btn--jump" type="button" data-touch="jump" aria-label="Jump">&#9650;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="grid grid--2" style="align-items:start;gap:clamp(2rem,4vw,3.5rem)">
+        <div class="stack">
+          <p class="eyebrow">Controls</p>
+          <h2 style="font-size:1.75rem">How to play.</h2>
+          <div class="control-grid">
+            <div class="control-card">
+              <h3>Move <span>P1</span></h3>
+              <div class="key-row"><span class="key">A</span><span class="key">D</span>
+                <span class="key">&#8592;</span><span class="key">&#8594;</span></div>
+            </div>
+            <div class="control-card">
+              <h3>Jump <span>P1</span></h3>
+              <div class="key-row"><span class="key">Space</span><span class="key">W</span><span class="key">&#8593;</span></div>
+              <p style="font-size:var(--fs-xs);color:var(--text-3);line-height:1.6">Hold for a higher jump. Release early to cut it short.</p>
+            </div>
+            <div class="control-card">
+              <h3>Drop through <span>P1</span></h3>
+              <div class="key-row"><span class="key">S</span><span class="key">&#8595;</span></div>
+              <p style="font-size:var(--fs-xs);color:var(--text-3);line-height:1.6">Works on the thin translucent ledges.</p>
+            </div>
+            <div class="control-card">
+              <h3>Player two <span>local</span></h3>
+              <div class="key-row"><span class="key">J</span><span class="key">L</span>
+                <span class="key">I</span><span class="key">K</span></div>
+            </div>
+            <div class="control-card">
+              <h3>Pause <span>any</span></h3>
+              <div class="key-row"><span class="key">Esc</span><span class="key">P</span></div>
+            </div>
+            <div class="control-card">
+              <h3>Touch <span>mobile</span></h3>
+              <p style="font-size:var(--fs-xs);color:var(--text-3);line-height:1.6">
+                On-screen buttons appear automatically on touch devices, and can be
+                switched on manually in Settings.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack stack--lg">
+          <div class="stack">
+            <p class="eyebrow">What's in it</p>
+            <h2 style="font-size:1.75rem">Built properly.</h2>
+            <div class="feature-list" style="grid-template-columns:1fr">
+              <span class="feature-item">Three hand-authored levels across dawn cliffs, sky ruins and a crystal vault.</span>
+              <span class="feature-item">Movement built for feel: coyote time, jump buffering, variable jump height, tuned air control and apex float.</span>
+              <span class="feature-item">Moving platforms, jump pads, spike hazards, patrol enemies, drones, checkpoints and collectibles.</span>
+              <span class="feature-item">Local two-player co-op on one device, with a camera that keeps both runners in frame.</span>
+              <span class="feature-item">Online race mode over WebSockets — room codes, live positions, interpolated movement and disconnect handling.</span>
+              <span class="feature-item">Fixed-timestep physics so the game plays identically at 60 Hz and 144 Hz.</span>
+              <span class="feature-item">Respects reduced-motion, pauses when the tab is hidden and releases the audio context on exit.</span>
+            </div>
+          </div>
+
+          <div class="net-notice" data-server-notice>
+            <span aria-hidden="true">&#9888;</span>
+            <span data-server-notice-text></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="shell">
+      <div class="cta-band reveal">
+        <div class="cta-band__inner">
+          <p class="eyebrow">Back to the studio</p>
+          <h2 class="cta-band__title">This is what we do with <span class="serif">an idea.</span></h2>
+          <p class="cta-band__text">
+            Aether Drift exists to answer one question before you ask it: can this studio
+            actually ship something hard? If you have something hard, we would like to hear about it.
+          </p>
+          <div class="cta-band__actions">
+            <a class="btn btn--invert btn--lg" href="contact.html">Start a project <span class="btn__icon" aria-hidden="true">&#8594;</span></a>
+            <a class="btn btn--ghost btn--lg" style="--btn-fg:#fff;--btn-bg:transparent;border-color:rgb(255 255 255 / .45)"
+               href="project.html?slug=aether-drift">Read the case study</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div data-chrome-footer></div>
+
+<button class="back-top" type="button" data-back-top aria-label="Back to top">&uarr;</button>
+
+<script type="module" src="js/site/main.js"></script>
+<script type="module" src="js/game/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Services — SYNQ Technological Services</title>
+<meta name="description" content="Website design and development, e-commerce, web applications, game development, redesign, optimisation and maintenance from SYNQ Technological Services.">
+<link rel="canonical" href="https://synqtech.org/services.html">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SYNQ Technological Services">
+<meta property="og:title" content="Services — SYNQ Technological Services">
+<meta property="og:description" content="Website design and development, e-commerce, web applications, game development, redesign, optimisation and maintenance from SYNQ Technological Services.">
+<meta property="og:url" content="https://synqtech.org/services.html">
+<meta property="og:image" content="https://synqtech.org/assets/img/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Services — SYNQ Technological Services">
+<meta name="twitter:description" content="Website design and development, e-commerce, web applications, game development, redesign, optimisation and maintenance from SYNQ Technological Services.">
+<meta name="twitter:image" content="https://synqtech.org/assets/img/og-cover.jpg">
+
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/img/favicon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;700;800&display=swap">
+
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/components.css">
+<link rel="stylesheet" href="styles/site.css">
+<link rel="stylesheet" href="styles/transition.css">
+
+<script>
+/* Inline boot: theme before first paint + the overlay scaffolding.
+   Must stay tiny and dependency-free. Independent timeout failsafes mean no
+   overlay can ever trap the visitor, even if the module bundle fails. */
+(function () {
+  var d = document.documentElement, ls = null, nav = false;
+  try { ls = localStorage.getItem('synq:theme'); } catch (e) {}
+  try { nav = sessionStorage.getItem('synq:navigating') === '1'; sessionStorage.removeItem('synq:navigating'); } catch (e) {}
+  var dark = ls ? ls === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  d.classList.add('js');
+  d.classList.toggle('dark', !!dark);
+  d.classList.toggle('light', !dark);
+  if (nav) d.classList.add('is-route-nav');
+
+  function scaffold() {
+    var b = document.createElement('div');
+    b.className = 'boot-loader'; b.id = 'boot-loader';
+    b.setAttribute('data-boot-loader', '');
+    b.setAttribute('role', 'status');
+    b.setAttribute('aria-live', 'polite');
+    b.setAttribute('aria-label', 'Loading');
+    if (nav) b.hidden = true;
+    b.innerHTML =
+      '<div class="boot-loader__inner">' +
+        '<svg class="boot-mark" viewBox="0 0 100 100" aria-hidden="true"><defs>' +
+          '<linearGradient id="bootStroke" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0" stop-color="#0b5fff"/><stop offset="1" stop-color="#00c8f0"/>' +
+          '</linearGradient></defs>' +
+          '<path class="boot-mark__glow" d="M73 27c-6-8-16-12-25-10C35 19 25 29 23 42c-2 14 4 26 15 32 9 5 19 4 27-1"/>' +
+          '<path class="boot-mark__path" d="M73 27c-6-8-16-12-25-10C35 19 25 29 23 42c-2 14 4 26 15 32 9 5 19 4 27-1"/>' +
+        '</svg>' +
+        '<div class="boot-word">SYNQ<small>DIGITAL STUDIO</small></div>' +
+        '<div class="boot-bar"><div class="boot-bar__fill" data-boot-fill></div></div>' +
+        '<div class="boot-meta"><span>Preparing the studio</span><span data-boot-pct>0%</span></div>' +
+      '</div>';
+    document.body.appendChild(b);
+
+    var v = document.createElement('div');
+    v.className = 'route-veil'; v.id = 'route-veil';
+    v.setAttribute('data-route-veil', '');
+    v.setAttribute('aria-hidden', 'true');
+    v.innerHTML =
+      '<div class="route-veil__panel"></div><div class="route-veil__panel"></div>' +
+      '<div class="route-veil__panel"></div><div class="route-veil__panel"></div>' +
+      '<div class="route-veil__panel"></div>' +
+      '<div class="route-veil__mark"><span>SYNQ</span></div>';
+    document.body.appendChild(v);
+
+    setTimeout(function () {
+      if (!d.classList.contains('is-route-nav')) return;
+      d.classList.remove('is-route-nav');
+      v.classList.remove('is-covering', 'is-busy');
+      v.classList.add('is-revealing');
+    }, 2400);
+    setTimeout(function () {
+      if (b && !b.classList.contains('is-done')) {
+        b.classList.add('is-done');
+        setTimeout(function () { b.hidden = true; }, 460);
+      }
+    }, 3400);
+  }
+
+  if (document.body) scaffold();
+  else document.addEventListener('DOMContentLoaded', scaffold, { once: true });
+})();
+</script>
+</head>
+
+<body id="top" data-page="services">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="fx-grid" aria-hidden="true"></div>
+<div class="fx-aurora" aria-hidden="true"></div>
+
+<noscript>
+  <div class="noscript-nav" role="navigation" aria-label="Navigation">
+    <a href="index.html"><strong>SYNQ</strong></a>
+    <a href="about.html">About</a><a href="services.html">Services</a>
+    <a href="portfolio.html">Work</a><a href="game.html">The Game</a><a href="contact.html">Contact</a>
+  </div>
+</noscript>
+
+<div data-chrome-header></div>
+
+<main id="main" tabindex="-1">
+
+  <section class="page-head">
+    <div class="shell">
+      <div class="page-head__inner">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Services</span>
+        </nav>
+        <p class="eyebrow reveal">Services</p>
+        <h1 class="page-head__title reveal" style="--reveal-delay:60ms">
+          What we <span class="serif">actually do.</span>
+        </h1>
+        <p class="page-head__lede reveal" style="--reveal-delay:110ms">
+          Six ways we help teams ship better digital products. Every engagement is
+          scoped from a written plan with a fixed price — no open-ended hourly drift.
+        </p>
+        <div class="page-head__meta">
+          <span class="badge badge--mint badge--dot">Available for new work</span>
+          <span class="badge badge--neutral">Fixed-scope pricing</span>
+          <span class="badge badge--neutral">Lagos · Remote</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="shell">
+
+      <div class="service-detail reveal">
+        <span class="service-detail__num">01</span>
+        <div class="service-detail__body">
+          <h2 class="service-detail__title">Custom website design &amp; development</h2>
+          <p class="service-detail__text">
+            A website built around your business rather than a template. We design the
+            interface, build it in clean semantic code, and wire it to whatever your team
+            already uses.
+          </p>
+          <div class="service-detail__grid">
+            <span class="service-detail__point">Interface design and design-system setup</span>
+            <span class="service-detail__point">Responsive build tested on real devices</span>
+            <span class="service-detail__point">Content model and editor training</span>
+            <span class="service-detail__point">Performance and Core Web Vitals targets</span>
+            <span class="service-detail__point">Technical SEO foundations</span>
+            <span class="service-detail__point">Analytics and event tracking</span>
+          </div>
+          <a class="link-arrow" href="contact.html?service=websites">Enquire about this service <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+
+      <div class="service-detail reveal">
+        <span class="service-detail__num">02</span>
+        <div class="service-detail__body">
+          <h2 class="service-detail__title">Business websites &amp; landing pages</h2>
+          <p class="service-detail__text">
+            For when you need a strong, focused presence quickly: a landing page that
+            converts, or a compact multi-page site that makes a young business look
+            established.
+          </p>
+          <div class="service-detail__grid">
+            <span class="service-detail__point">Copy structure and page hierarchy</span>
+            <span class="service-detail__point">Conversion-focused layouts</span>
+            <span class="service-detail__point">Forms, CRM and email hand-off</span>
+            <span class="service-detail__point">Fast hosting and deployment setup</span>
+          </div>
+          <a class="link-arrow" href="contact.html?service=landing">Enquire about this service <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+
+      <div class="service-detail reveal">
+        <span class="service-detail__num">03</span>
+        <div class="service-detail__body">
+          <h2 class="service-detail__title">E-commerce solutions</h2>
+          <p class="service-detail__text">
+            Storefronts that make buying easy: catalogue architecture, a checkout that
+            does not fight the customer, and payment integrations that work in Nigeria
+            and internationally.
+          </p>
+          <div class="service-detail__grid">
+            <span class="service-detail__point">Catalogue, filtering and search</span>
+            <span class="service-detail__point">Paystack, Flutterwave, Stripe</span>
+            <span class="service-detail__point">Inventory and order workflows</span>
+            <span class="service-detail__point">Abandoned-cart and lifecycle email</span>
+          </div>
+          <a class="link-arrow" href="contact.html?service=ecommerce">Enquire about this service <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+
+      <div class="service-detail reveal">
+        <span class="service-detail__num">04</span>
+        <div class="service-detail__body">
+          <h2 class="service-detail__title">Web applications &amp; interactive products</h2>
+          <p class="service-detail__text">
+            Dashboards, portals, booking systems and internal tools. We build the whole
+            stack — data model, API, interface — with the operational detail that makes
+            software survive contact with real users.
+          </p>
+          <div class="service-detail__grid">
+            <span class="service-detail__point">Product discovery and data modelling</span>
+            <span class="service-detail__point">Authentication, roles and permissions</span>
+            <span class="service-detail__point">Realtime features over WebSockets</span>
+            <span class="service-detail__point">Audit trails and admin tooling</span>
+            <span class="service-detail__point">Automated testing on critical paths</span>
+            <span class="service-detail__point">Documentation and hand-over</span>
+          </div>
+          <a class="link-arrow" href="contact.html?service=web-apps">Enquire about this service <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+
+      <div class="service-detail reveal">
+        <span class="service-detail__num">05</span>
+        <div class="service-detail__body">
+          <h2 class="service-detail__title">Game development &amp; interactive entertainment</h2>
+          <p class="service-detail__text">
+            Original games and playable brand experiences. We wrote the physics,
+            rendering and networking layers behind Aether Drift ourselves, so we are not
+            guessing at how a game should feel.
+          </p>
+          <div class="service-detail__grid">
+            <span class="service-detail__point">Game design and level design</span>
+            <span class="service-detail__point">Custom physics and movement tuning</span>
+            <span class="service-detail__point">Procedural art and animation</span>
+            <span class="service-detail__point">Local and online multiplayer</span>
+            <span class="service-detail__point">Synthesised sound and music</span>
+          </div>
+          <a class="link-arrow" href="game.html">Play Aether Drift <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+
+      <div class="service-detail reveal">
+        <span class="service-detail__num">06</span>
+        <div class="service-detail__body">
+          <h2 class="service-detail__title">Redesign, optimisation &amp; maintenance</h2>
+          <p class="service-detail__text">
+            Already have something live? We audit it, fix what is hurting — speed,
+            accessibility, conversion, search — then keep it healthy with a support
+            retainer.
+          </p>
+          <div class="service-detail__grid">
+            <span class="service-detail__point">Performance and accessibility audit</span>
+            <span class="service-detail__point">Staged replatform without losing rankings</span>
+            <span class="service-detail__point">Monitoring, backups and uptime checks</span>
+            <span class="service-detail__point">Monthly improvement retainers</span>
+          </div>
+          <a class="link-arrow" href="contact.html?service=optimisation">Enquire about this service <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="pricing">
+    <div class="shell">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Investment</p>
+        <h2>A clear path to <span class="serif">something exceptional.</span></h2>
+        <p style="color:var(--text-2);line-height:1.75">
+          Starting prices for fixed-scope work. Every quote is confirmed after a short
+          discovery call, and every price is converted from one published rate.
+        </p>
+        <div class="currency-switch" data-currency role="group" aria-label="Choose display currency">
+          <button type="button" data-currency="NGN" aria-pressed="true">&#8358; Naira</button>
+          <button type="button" data-currency="USD" aria-pressed="false">$ US dollar</button>
+        </div>
+      </div>
+
+      <div class="grid grid--3" data-pricing></div>
+
+      <p style="margin-top:var(--sp-5);text-align:center;font-size:var(--fs-xs);color:var(--text-3)">
+        Prices are starting points and exclude third-party costs such as hosting, domains and licences.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell shell--narrow">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Common questions</p>
+        <h2>Things you might <span class="serif">want to know.</span></h2>
+      </div>
+      <div class="accordion">
+        <details class="accordion__item" open>
+          <summary class="accordion__summary">How long does a project take?
+            <span class="accordion__marker" aria-hidden="true"></span></summary>
+          <div class="accordion__panel">A focused landing page usually lands in three to five weeks. A multi-page site or web app typically runs eight to sixteen weeks depending on scope. You get a written timeline before we start.</div>
+        </details>
+        <details class="accordion__item">
+          <summary class="accordion__summary">Do you work with clients outside Nigeria?
+            <span class="accordion__marker" aria-hidden="true"></span></summary>
+          <div class="accordion__panel">Yes. We work remotely across time zones with asynchronous updates and a scheduled weekly call. Pricing can be quoted in Naira or US dollars.</div>
+        </details>
+        <details class="accordion__item">
+          <summary class="accordion__summary">What do you need from us to start?
+            <span class="accordion__marker" aria-hidden="true"></span></summary>
+          <div class="accordion__panel">A clear sense of the problem, access to any existing assets or systems, and one decision-maker who can approve work. We handle the rest, including copy support if you need it.</div>
+        </details>
+        <details class="accordion__item">
+          <summary class="accordion__summary">Can you redesign something that already exists?
+            <span class="accordion__marker" aria-hidden="true"></span></summary>
+          <div class="accordion__panel">Frequently. We can refresh the visual identity, fix experience gaps, improve performance, or replatform entirely — staging the change so search rankings and existing links are preserved.</div>
+        </details>
+        <details class="accordion__item">
+          <summary class="accordion__summary">What happens after launch?
+            <span class="accordion__marker" aria-hidden="true"></span></summary>
+          <div class="accordion__panel">Every project includes a support window for fixes. After that we offer flexible retainers for optimisation, new features and ongoing maintenance — or a clean hand-over to your own team.</div>
+        </details>
+        <details class="accordion__item">
+          <summary class="accordion__summary">Who owns the code?
+            <span class="accordion__marker" aria-hidden="true"></span></summary>
+          <div class="accordion__panel">You do. On final payment you receive the repository, documentation and deployment instructions. There is no proprietary framework you are locked into.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="cta-band reveal">
+        <div class="cta-band__inner">
+          <p class="eyebrow">Next step</p>
+          <h2 class="cta-band__title">Get a scope and a <span class="serif">fixed price.</span></h2>
+          <p class="cta-band__text">Tell us what you need. We reply within one business day with an honest view on scope, timeline and cost.</p>
+          <div class="cta-band__actions">
+            <a class="btn btn--invert btn--lg" href="contact.html">Start a project <span class="btn__icon" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div data-chrome-footer></div>
+
+<button class="back-top" type="button" data-back-top aria-label="Back to top">&uarr;</button>
+
+<script type="module" src="js/site/main.js"></script>
+
+</body>
+</html>

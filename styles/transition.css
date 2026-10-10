@@ -1,0 +1,213 @@
+/* ==========================================================================
+   SYNQ — Loading experience + route transitions
+   Two distinct, deliberately different visuals:
+     1. .boot-loader  — first paint of a session (branded monogram + progress)
+     2. .route-veil   — panel sweep used for internal navigation
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Boot loader
+   -------------------------------------------------------------------------- */
+
+.boot-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(120% 90% at 50% 0%, #0d1b3a 0%, #070d19 55%, #050912 100%);
+  color: #eaf1ff;
+  transition: opacity 420ms var(--e-out), visibility 420ms linear;
+}
+.boot-loader[hidden] { display: none; }
+.boot-loader.is-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.boot-loader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+  width: min(340px, 78vw);
+  text-align: center;
+}
+
+/* Monogram: stroked "S" path drawn by stroke-dashoffset, then a light sweep */
+.boot-mark { width: 92px; height: 92px; overflow: visible; }
+.boot-mark__path {
+  fill: none;
+  stroke: url(#bootStroke);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: boot-draw 1500ms var(--e-in-out) forwards;
+}
+.boot-mark__glow {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 12;
+  stroke-linecap: round;
+  opacity: 0.32;
+  filter: blur(9px);
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: boot-draw 1500ms var(--e-in-out) forwards;
+}
+@keyframes boot-draw { to { stroke-dashoffset: 0; } }
+
+.boot-word {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  color: #f2f7ff;
+  opacity: 0;
+  animation: boot-rise 620ms var(--e-out) 260ms forwards;
+}
+.boot-word small {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  color: #7f95bd;
+}
+@keyframes boot-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.boot-bar {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: #1b2942;
+  overflow: hidden;
+  opacity: 0;
+  animation: boot-rise 520ms var(--e-out) 420ms forwards;
+}
+.boot-bar__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--brand), var(--cyan));
+  box-shadow: 0 0 14px color-mix(in srgb, var(--cyan) 70%, transparent);
+  transition: width 260ms var(--e-out);
+}
+
+.boot-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6f84ab;
+  opacity: 0;
+  animation: boot-rise 520ms var(--e-out) 520ms forwards;
+}
+
+/* Failsafe: if JS never marks the loader done, hide it anyway */
+@media (prefers-reduced-motion: reduce) {
+  .boot-mark__path,
+  .boot-mark__glow,
+  .boot-word,
+  .boot-bar,
+  .boot-meta { animation-duration: 0.001ms; animation-delay: 0ms; }
+  .boot-mark__path, .boot-mark__glow { stroke-dashoffset: 0; }
+  .boot-word, .boot-bar, .boot-meta { opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   2. Route veil — panel sweep for internal navigation
+   -------------------------------------------------------------------------- */
+
+.route-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  pointer-events: none;
+}
+.route-veil.is-busy { pointer-events: all; }
+
+.route-veil__panel {
+  transform: scaleY(0);
+  transform-origin: bottom;
+  background: linear-gradient(180deg, #0b2a6b 0%, #0b1220 100%);
+  transition: transform 420ms var(--e-in-out);
+}
+.route-veil__panel:nth-child(1) { transition-delay: 0ms; }
+.route-veil__panel:nth-child(2) { transition-delay: 45ms; }
+.route-veil__panel:nth-child(3) { transition-delay: 90ms; }
+.route-veil__panel:nth-child(4) { transition-delay: 135ms; }
+.route-veil__panel:nth-child(5) { transition-delay: 180ms; }
+
+/* Covering (exit) */
+.route-veil.is-covering .route-veil__panel {
+  transform: scaleY(1);
+  transform-origin: bottom;
+}
+/* Revealing (entrance) */
+.route-veil.is-revealing .route-veil__panel {
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+.route-veil__mark {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 220ms var(--e-out);
+}
+.route-veil.is-covering .route-veil__mark { opacity: 0.75; transition-delay: 200ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .route-veil__panel { transition-duration: 90ms !important; transition-delay: 0ms !important; }
+  .route-veil__mark { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   3. Page entrance
+   -------------------------------------------------------------------------- */
+
+.page-enter {
+  animation: page-enter 620ms var(--e-out) both;
+}
+@keyframes page-enter {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter { animation: none; }
+}
+
+/* --------------------------------------------------------------------------
+   Arrival states
+   -------------------------------------------------------------------------- */
+
+/* Coming from another page: the veil starts fully covering so the new document
+   is never briefly visible behind it. Cleared by the transition module (and by
+   the inline failsafe in <head> if the module never runs). */
+html.is-route-nav .route-veil__panel { transform: scaleY(1); transform-origin: top; }
+html.is-route-nav .boot-loader { display: none; }

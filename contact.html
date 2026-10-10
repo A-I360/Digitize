@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — SYNQ Technological Services</title>
+<meta name="description" content="Start a project with SYNQ Technological Services. Tell us what you are building and we reply within one business day.">
+<link rel="canonical" href="https://synqtech.org/contact.html">
+<meta name="theme-color" content="#ffffff">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SYNQ Technological Services">
+<meta property="og:title" content="Contact — SYNQ Technological Services">
+<meta property="og:description" content="Start a project with SYNQ Technological Services. Tell us what you are building and we reply within one business day.">
+<meta property="og:url" content="https://synqtech.org/contact.html">
+<meta property="og:image" content="https://synqtech.org/assets/img/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contact — SYNQ Technological Services">
+<meta name="twitter:description" content="Start a project with SYNQ Technological Services. Tell us what you are building and we reply within one business day.">
+<meta name="twitter:image" content="https://synqtech.org/assets/img/og-cover.jpg">
+
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/img/favicon-512.png" sizes="512x512" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/favicon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;700;800&display=swap">
+
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/components.css">
+<link rel="stylesheet" href="styles/site.css">
+<link rel="stylesheet" href="styles/transition.css">
+
+<script>
+/* Inline boot: theme before first paint + the overlay scaffolding.
+   Must stay tiny and dependency-free. Independent timeout failsafes mean no
+   overlay can ever trap the visitor, even if the module bundle fails. */
+(function () {
+  var d = document.documentElement, ls = null, nav = false;
+  try { ls = localStorage.getItem('synq:theme'); } catch (e) {}
+  try { nav = sessionStorage.getItem('synq:navigating') === '1'; sessionStorage.removeItem('synq:navigating'); } catch (e) {}
+  var dark = ls ? ls === 'dark' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+  d.classList.add('js');
+  d.classList.toggle('dark', !!dark);
+  d.classList.toggle('light', !dark);
+  if (nav) d.classList.add('is-route-nav');
+
+  function scaffold() {
+    var b = document.createElement('div');
+    b.className = 'boot-loader'; b.id = 'boot-loader';
+    b.setAttribute('data-boot-loader', '');
+    b.setAttribute('role', 'status');
+    b.setAttribute('aria-live', 'polite');
+    b.setAttribute('aria-label', 'Loading');
+    if (nav) b.hidden = true;
+    b.innerHTML =
+      '<div class="boot-loader__inner">' +
+        '<svg class="boot-mark" viewBox="0 0 100 100" aria-hidden="true"><defs>' +
+          '<linearGradient id="bootStroke" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0" stop-color="#0b5fff"/><stop offset="1" stop-color="#00c8f0"/>' +
+          '</linearGradient></defs>' +
+          '<path class="boot-mark__glow" d="M73 27c-6-8-16-12-25-10C35 19 25 29 23 42c-2 14 4 26 15 32 9 5 19 4 27-1"/>' +
+          '<path class="boot-mark__path" d="M73 27c-6-8-16-12-25-10C35 19 25 29 23 42c-2 14 4 26 15 32 9 5 19 4 27-1"/>' +
+        '</svg>' +
+        '<div class="boot-word">SYNQ<small>DIGITAL STUDIO</small></div>' +
+        '<div class="boot-bar"><div class="boot-bar__fill" data-boot-fill></div></div>' +
+        '<div class="boot-meta"><span>Preparing the studio</span><span data-boot-pct>0%</span></div>' +
+      '</div>';
+    document.body.appendChild(b);
+
+    var v = document.createElement('div');
+    v.className = 'route-veil'; v.id = 'route-veil';
+    v.setAttribute('data-route-veil', '');
+    v.setAttribute('aria-hidden', 'true');
+    v.innerHTML =
+      '<div class="route-veil__panel"></div><div class="route-veil__panel"></div>' +
+      '<div class="route-veil__panel"></div><div class="route-veil__panel"></div>' +
+      '<div class="route-veil__panel"></div>' +
+      '<div class="route-veil__mark"><span>SYNQ</span></div>';
+    document.body.appendChild(v);
+
+    setTimeout(function () {
+      if (!d.classList.contains('is-route-nav')) return;
+      d.classList.remove('is-route-nav');
+      v.classList.remove('is-covering', 'is-busy');
+      v.classList.add('is-revealing');
+    }, 2400);
+    setTimeout(function () {
+      if (b && !b.classList.contains('is-done')) {
+        b.classList.add('is-done');
+        setTimeout(function () { b.hidden = true; }, 460);
+      }
+    }, 3400);
+  }
+
+  if (document.body) scaffold();
+  else document.addEventListener('DOMContentLoaded', scaffold, { once: true });
+})();
+</script>
+</head>
+
+<body id="top" data-page="contact">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="fx-grid" aria-hidden="true"></div>
+<div class="fx-aurora" aria-hidden="true"></div>
+
+<noscript>
+  <div class="noscript-nav" role="navigation" aria-label="Navigation">
+    <a href="index.html"><strong>SYNQ</strong></a>
+    <a href="about.html">About</a><a href="services.html">Services</a>
+    <a href="portfolio.html">Work</a><a href="game.html">The Game</a><a href="contact.html">Contact</a>
+  </div>
+</noscript>
+
+<div data-chrome-header></div>
+
+<main id="main" tabindex="-1">
+
+  <section class="page-head">
+    <div class="shell">
+      <div class="page-head__inner">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Contact</span>
+        </nav>
+        <p class="eyebrow reveal">Contact</p>
+        <h1 class="page-head__title reveal" style="--reveal-delay:60ms">
+          Let's make something <span class="serif">worth talking about.</span>
+        </h1>
+        <p class="page-head__lede reveal" style="--reveal-delay:110ms">
+          Tell us what you're building. We reply within one business day with an honest
+          view on scope, timeline and cost — and we'll say so plainly if we're not the
+          right studio for the job.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="shell">
+      <div class="contact-grid">
+
+        <aside class="stack stack--lg reveal">
+          <div class="contact-card">
+            <p class="eyebrow">Direct lines</p>
+            <div class="contact-list">
+              <div class="contact-list__item">
+                <span class="contact-list__label">Email</span>
+                <span class="contact-list__value"><a href="mailto:info@synqtech.org">info@synqtech.org</a></span>
+              </div>
+              <div class="contact-list__item">
+                <span class="contact-list__label">WhatsApp</span>
+                <span class="contact-list__value"><a href="https://wa.me/2349071618499" target="_blank" rel="noopener noreferrer">09071618499</a></span>
+              </div>
+              <div class="contact-list__item">
+                <span class="contact-list__label">Studio</span>
+                <span class="contact-list__value">Lagos, Nigeria · remote worldwide</span>
+              </div>
+              <div class="contact-list__item">
+                <span class="contact-list__label">Response time</span>
+                <span class="contact-list__value">Within one business day</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <p class="eyebrow">Good to know</p>
+            <ul class="stack stack--sm" style="font-size:var(--fs-sm);color:var(--text-2);line-height:1.7">
+              <li style="display:flex;gap:.6rem"><span aria-hidden="true" style="color:var(--accent)">✦</span><span>Fixed-scope pricing — you approve the price before we start.</span></li>
+              <li style="display:flex;gap:.6rem"><span aria-hidden="true" style="color:var(--accent)">✦</span><span>You own the code, the repository and the deployment.</span></li>
+              <li style="display:flex;gap:.6rem"><span aria-hidden="true" style="color:var(--accent)">✦</span><span>Rough sketches, half-written briefs and vague ideas are all fine starting points.</span></li>
+            </ul>
+          </div>
+        </aside>
+
+        <div class="form-card reveal" style="--reveal-delay:80ms">
+          <form novalidate data-contact-form>
+            <div class="stack">
+
+              <div class="form-grid">
+                <div class="field">
+                  <label class="field__label" for="name">Name <span class="req" aria-hidden="true">*</span></label>
+                  <input class="input" id="name" name="name" type="text" autocomplete="name"
+                         placeholder="Your name" required aria-describedby="name-error">
+                  <span class="field__error" id="name-error" role="alert"></span>
+                </div>
+
+                <div class="field">
+                  <label class="field__label" for="email">Email <span class="req" aria-hidden="true">*</span></label>
+                  <input class="input" id="email" name="email" type="email" autocomplete="email"
+                         placeholder="you@company.com" required aria-describedby="email-error">
+                  <span class="field__error" id="email-error" role="alert"></span>
+                </div>
+
+                <div class="field">
+                  <label class="field__label" for="projectType">Project type <span class="req" aria-hidden="true">*</span></label>
+                  <select class="select" id="projectType" name="projectType" required aria-describedby="type-error">
+                    <option value="" disabled selected>Select one</option>
+                    <option>Website design &amp; development</option>
+                    <option>Landing page</option>
+                    <option>E-commerce</option>
+                    <option>Web application</option>
+                    <option>Game or interactive experience</option>
+                    <option>Redesign, optimisation or maintenance</option>
+                    <option>Something else</option>
+                  </select>
+                  <span class="field__error" id="type-error" role="alert"></span>
+                </div>
+
+                <div class="field">
+                  <label class="field__label" for="budget">Budget range</label>
+                  <select class="select" id="budget" name="budget" data-budget aria-describedby="budget-hint">
+                    <option value="">Prefer not to say</option>
+                  </select>
+                  <span class="field__error" id="budget-error" role="alert"></span>
+                  <span id="budget-hint" style="font-size:var(--fs-xs);color:var(--text-3)">Optional — it helps us scope honestly.</span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field__label" for="message">Tell us about it <span class="req" aria-hidden="true">*</span></label>
+                <textarea class="textarea" id="message" name="message"
+                          placeholder="What are you building, who is it for, and what does success look like?"
+                          required aria-describedby="message-error"></textarea>
+                <span class="field__error" id="message-error" role="alert"></span>
+              </div>
+
+              <!-- Honeypot: hidden from people, tempting for bots. -->
+              <div class="hp" aria-hidden="true">
+                <label for="website">Leave this field empty</label>
+                <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+              </div>
+
+              <button class="btn btn--primary btn--lg btn--block" type="submit" data-submit data-label="Send enquiry">
+                Send enquiry <span class="btn__icon" aria-hidden="true">→</span>
+              </button>
+
+              <div class="form-status" data-form-status></div>
+
+              <p style="font-size:var(--fs-xs);color:var(--text-3);line-height:1.7">
+                We use your details only to reply to this enquiry. See our
+                <a href="privacy.html">privacy policy</a>.
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt section--tight">
+    <div class="shell shell--narrow">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Before you write</p>
+        <h2>Questions we get <span class="serif">a lot.</span></h2>
+      </div>
+      <div class="accordion">
+        <details class="accordion__item" open>
+          <summary class="accordion__summary">Do I need a finished brief?
+            <span class="accordion__marker" aria-hidden="true"></span></summary>
+          <div class="accordion__panel">No. A paragraph describing the problem is plenty. Discovery is where we turn that into a scope, and it is included in every engagement.</div>
+        </details>
+        <details class="accordion__item">
+          <summary class="accordion__summary">How quickly can you start?
+            <span class="accordion__marker" aria-hidden="true"></span></summary>
+          <div class="accordion__panel">Usually within two to three weeks of signing. If your timing is tight, say so in the message — we hold a little capacity for urgent work.</div>
+        </details>
+        <details class="accordion__item">
+          <summary class="accordion__summary">Can you work with our existing site or team?
+            <span class="accordion__marker" aria-hidden="true"></span></summary>
+          <div class="accordion__panel">Yes. We regularly join in-flight projects, take over legacy codebases, or work alongside an internal team on a specific slice of the product.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div data-chrome-footer></div>
+
+<button class="back-top" type="button" data-back-top aria-label="Back to top">&uarr;</button>
+
+<script type="module" src="js/site/main.js"></script>
+
+</body>
+</html>
