@@ -164,6 +164,9 @@ npm test        # 9 suites, ~25 s
 | DOM smoke test | the real page modules run inside jsdom: chrome mounts, the portfolio renders from data, the game boots, moves, jumps and pauses without a console error |
 | Site UI | the contact form never claims to have sent what it did not send; sample projects are flagged; the currency switch derives both currencies from one rate |
 | Game page UI | title → play, pause, settings, level select, local two-player and all four deep links |
+| Accessibility audit | 12 rules against the rendered DOM: accessible names, aria that resolves, heading order, landmarks, no positive tabindex |
+| Device behaviour | touch controls mount only on a coarse pointer and actually move the runner; a hidden tab stops the loop; the game never scrolls the page; no `AudioContext` is survivable |
+| Performance budgets | first-load weight, image size and dimensions, render-blocking requests, draw calls per frame, physics cost per step |
 | Online lobby | two jsdom pages on real WebSockets: create a room, share the code, join, start, race, finish, leave |
 | Multiplayer rooms | the wire protocol end to end, every error path, and the same-origin proxy |
 
@@ -250,9 +253,28 @@ Static analysis, the level bot and the HTTP crawl all passed while these were li
 | `hostRoom`/`joinRoom` resolved as soon as they sent | a refused join stranded the visitor on a "Connecting…" lobby that was never going to connect |
 | `new URL()` threw on a protocol-relative target like `//` | **one malformed request killed the site server**, taking every page down |
 | The static server served anything inside the repo root | `server/data/enquiries.log` — every visitor's name, email and IP — was publicly readable |
+| `onGameState` handled RUNNING and ENDED but not PAUSED | switching tabs froze the game with no overlay and no visible way to resume — the pause screen followed the key press, not the state |
+| Nothing was compressed | every visitor downloaded 284 KB of raw JS and CSS. Brotli takes the biggest file from 30.3 KB to 7.8 KB |
 
 The last two are the reason the crawl suite now fires hostile paths at the server and
 then checks that the homepage still answers.
+
+## Performance
+
+Measured by `npm run test:perf`, which talks to the server over raw HTTP (Node's
+`fetch` would decompress the response behind its back and make every number a lie).
+
+| | |
+|---|---|
+| Heaviest first load, compressed | **29 KB** (game.html: HTML + CSS + JS + images) |
+| Brotli on `js/game/render.js` | 30.3 KB → **7.8 KB** (74% off); gzip 8.1 KB |
+| Compression | brotli → gzip → identity, chosen from `Accept-Encoding`, with `Vary` set and results cached per file. Text only — a JPEG is never recompressed |
+| Third-party stylesheets in the critical path | **none** — the Google Fonts sheet loads as `media="print"` and promotes itself on arrival, so text renders immediately in the system stack |
+| Physics | 0.016–0.032 ms per fixed step, about 0.2% of a frame |
+| Draw calls per frame | 1,017 / 1,116 / 1,548 (levels 1–3), against a 4,000 budget |
+
+The budgets are regression tripwires, not benchmarks. None of this is a real
+device — the numbers say "nothing here is obviously wrong", not "this is fast".
 
 ---
 

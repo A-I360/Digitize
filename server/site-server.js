@@ -19,12 +19,64 @@ import { extname, join, normalize, sep, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
 import { connect as netConnect } from 'node:net';
+import { gzipSync, brotliCompressSync, constants as zlibConstants } from 'node:zlib';
 
 const ROOT = resolve(fileURLToPath(new URL('../', import.meta.url)));
 const PORT = Number(process.env.PORT || 8080);
 const HOST = process.env.HOST || '0.0.0.0';
 const LOG_DIR = join(ROOT, 'server', 'data');
 const LOG_FILE = join(LOG_DIR, 'enquiries.log');
+
+/**
+ * Compression.
+ *
+ * The site ships ~280 KB of unminified JS and CSS. There is no build step by
+ * design, so that is what the browser would otherwise download in full — which
+ * matters a great deal on mobile data. Both encoders are in Node's stdlib, so
+ * this costs a dependency nothing.
+ */
+
+/** Only text benefits. Recompressing a JPEG is pure waste. */
+const COMPRESSIBLE = /^(text\/|application\/(javascript|json|xml|manifest\+json|ld\+json)|image\/(svg\+xml|x-icon))/;
+
+/** Below this, the headers cost more than the bytes saved. */
+const COMPRESS_MIN = 1024;
+
+/** path + mtime + encoding → compressed buffer, so we compress each file once. */
+const compressedCache = new Map();
+
+/**
+ * Picks the best encoding the client offered and compresses into it.
+ * Returns null when the body should be sent as-is.
+ */
+function compress(file, mtimeMs, body, acceptEncoding) {
+  if (!COMPRESSIBLE.test(MIME[extname(file).toLowerCase()] || '')) return null;
+  if (body.length < COMPRESS_MIN) return null;
+
+  const offered = (acceptEncoding || '').toLowerCase();
+  const encoding = /\bbr\b/.test(offered) ? 'br'
+    : /\bgzip\b/.test(offered) ? 'gzip'
+    : null;
+  if (!encoding) return null;
+
+  const key = `${file}|${mtimeMs}|${encoding}`;
+  const cached = compressedCache.get(key);
+  if (cached) return { encoding, body: cached };
+
+  const packed = encoding === 'br'
+    ? brotliCompressSync(body, {
+      params: { [zlibConstants.BROTLI_PARAM_QUALITY]: 5 },
+    })
+    : gzipSync(body, { level: 6 });
+
+  // Never send something larger than the original — a tiny file can grow.
+  if (packed.length >= body.length) return null;
+
+  // Keep the cache from growing without bound across a long session.
+  if (compressedCache.size > 200) compressedCache.clear();
+  compressedCache.set(key, packed);
+  return { encoding, body: packed };
+}
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -264,16 +316,26 @@ async function handleRequest(req, res) {
 
   const type = MIME[extname(file).toLowerCase()] || 'application/octet-stream';
   try {
+    const info = await stat(file);
     const body = await readFile(file);
-    res.writeHead(status, {
+    const packed = compress(file, info.mtimeMs, body, req.headers['accept-encoding']);
+
+    const headers = {
       'Content-Type': type,
-      'Content-Length': body.length,
+      'Content-Length': packed ? packed.body.length : body.length,
       // Versioned assets are cacheable; HTML is not, so edits show up instantly.
       'Cache-Control': file.includes(`${sep}assets${sep}`)
         ? 'public, max-age=3600'
         : 'no-cache',
-    });
-    res.end(req.method === 'HEAD' ? undefined : body);
+    };
+    if (packed) {
+      headers['Content-Encoding'] = packed.encoding;
+      // Without this a shared cache could hand the compressed copy to a client
+      // that never asked for it.
+      headers.Vary = 'Accept-Encoding';
+    }
+    res.writeHead(status, headers);
+    res.end(req.method === 'HEAD' ? undefined : (packed ? packed.body : body));
   } catch (error) {
     res.writeHead(500, { 'Content-Type': 'text/plain' });
     res.end(`Server error: ${error.message}`);

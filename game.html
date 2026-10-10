@@ -28,7 +28,20 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;700;800&display=swap">
+<!--
+      Fonts load without blocking the first paint. The stylesheet is requested
+      as `media="print"` (so the parser does not wait on it) and promoted to
+      `all` once it arrives. Text renders immediately in the system stack from
+      tokens.css and swaps when Manrope lands — `display=swap` already makes
+      that swap invisible, and it stops a third-party origin from sitting in
+      the critical path.
+    -->
+    <link rel="stylesheet" media="print" onload="this.media='all';this.onload=null"
+          href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;700;800&display=swap">
+    <noscript>
+      <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;700;800&display=swap">
+    </noscript>
 
 <link rel="stylesheet" href="styles/tokens.css">
 <link rel="stylesheet" href="styles/base.css">
