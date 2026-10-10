@@ -221,8 +221,13 @@ export class Game {
   }
 
   applyGhost(msg) {
+    const skinIndex = Number.isFinite(msg.skin) ? msg.skin : 2;
     const existing = this.ghosts.get(msg.id) || {
-      id: msg.id, name: msg.name || 'Guest', skinIndex: msg.skin ?? 2,
+      id: msg.id, name: msg.name || 'Guest',
+      skinIndex,
+      // Ghosts are drawn by exactly the same code as local players, so they
+      // need a resolved skin, not just an index into one.
+      skin: SKINS[skinIndex] || SKINS[0],
       w: PLAYER.WIDTH, h: PLAYER.HEIGHT, facing: 1, anim: { state: 'idle', time: 0, run: 0, land: 0 },
       scarf: Array.from({ length: 7 }, () => ({ x: msg.x, y: msg.y, px: msg.x, py: msg.y })),
       x: msg.x, y: msg.y, renderX: msg.x, renderY: msg.y,
@@ -238,6 +243,10 @@ export class Game {
     existing.hearts = msg.hearts ?? existing.hearts;
     existing.finished = Boolean(msg.finished);
     existing.anim.state = msg.anim || 'idle';
+    if (Number.isFinite(msg.skin)) {
+      existing.skinIndex = msg.skin;
+      existing.skin = SKINS[msg.skin] || existing.skin;
+    }
     existing.anim.time += 1 / 60;
     if (existing.anim.state === 'run') existing.anim.run += 0.2;
     existing.name = msg.name || existing.name;

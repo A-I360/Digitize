@@ -12,6 +12,9 @@
     "test:levels": "node tests/level-playthrough.mjs",
     "test:contrast": "node tests/contrast.mjs",
     "test:dom": "node tests/dom-smoke.mjs",
+    "test:ui": "node tests/game-ui.mjs",
+    "test:online": "node tests/online-lobby.mjs",
+    "test:site-ui": "node tests/site-ui.mjs",
     "test:multiplayer": "node tests/multiplayer.mjs",
     "test:site": "node tests/site.mjs"
   },

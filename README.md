@@ -151,31 +151,46 @@ a physics constant and the audit limit moves with it.
 ## Tests
 
 ```bash
-npm test
+npm install     # pulls jsdom, needed by the four DOM-level suites
+npm test        # 9 suites, ~25 s
 ```
 
 | Suite | What it proves |
 |---|---|
 | Level audit | every gap is jumpable, every platform reachable, given the real physics |
 | Level play-throughs | a bot drives the **real simulation** and finishes all three levels |
+| Colour contrast | every text/background pair in the design tokens meets WCAG AA, in both themes |
 | Site crawl | all 8 pages serve; SEO tags, one `h1`, alt text, no third-party assets; all 22 internal links resolve; the contact endpoint accepts, validates and rejects correctly |
 | DOM smoke test | the real page modules run inside jsdom: chrome mounts, the portfolio renders from data, the game boots, moves, jumps and pauses without a console error |
-| Colour contrast | every text/background pair in the design tokens meets WCAG AA, in both themes |
-| Multiplayer rooms | two real WebSocket clients run the full room lifecycle, plus every error path and the same-origin proxy |
+| Site UI | the contact form never claims to have sent what it did not send; sample projects are flagged; the currency switch derives both currencies from one rate |
+| Game page UI | title → play, pause, settings, level select, local two-player and all four deep links |
+| Online lobby | two jsdom pages on real WebSockets: create a room, share the code, join, start, race, finish, leave |
+| Multiplayer rooms | the wire protocol end to end, every error path, and the same-origin proxy |
 
 Two of these are worth calling out.
 
 **Level play-throughs** step `world.js` with fixed timesteps and a heuristic bot that rides
 platforms, jumps pits and stomps enemies. If the bot can finish a level, a person can.
 
-**The DOM smoke test** exists because there is no browser here. It loads each page in jsdom
-and runs the actual modules — which is how it caught the boot script calling
-`document.body.appendChild` from inside `<head>`, where `document.body` does not exist yet,
-and `canvas-field.js` constructing an `IntersectionObserver` unconditionally. Both would
-have been invisible until someone opened the site.
+**The DOM tests** exist because there is no browser here. They load the pages in jsdom and
+run the actual modules — which is how they found five bugs that every static check and
+every simulation test had missed:
 
-The smoke test is not a substitute for looking at the page. Visual layout, animation timing
-and real input feel still need a human.
+| Bug | What it broke |
+|---|---|
+| The boot script called `document.body.appendChild` from inside `<head>` | `document.body` is `null` there, so it threw and silently disabled the loader *and* the pre-paint theme |
+| `canvas-field.js` built an `IntersectionObserver` unconditionally | crashed on any DOM without one |
+| `main.js` called `this.renderLobby()`, which does not exist | clicking *Create a room* threw, so the whole online flow did nothing |
+| Ghosts had no `skin` object | online play crashed on the first frame a remote player was drawn |
+| `hostRoom`/`joinRoom` resolved as soon as they sent | a refused join left the visitor stranded on a "Connecting…" lobby that was never going to connect |
+
+The online lobby test is the one I would keep if I could only keep one: it runs two
+browser-like pages against the real room server and asserts the things a visitor would
+notice — the code appears, the second player shows up, only the host can start, and
+everyone is told when someone leaves.
+
+None of this is a substitute for looking at the page. Visual layout, animation timing and
+how the game actually feels still need a human.
 
 ---
 

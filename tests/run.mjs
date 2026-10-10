@@ -18,6 +18,9 @@ const SUITE = [
   ['Colour contrast', 'tests/contrast.mjs', []],
   ['Site crawl', 'tests/site.mjs', []],
   ['DOM smoke test', 'tests/dom-smoke.mjs', []],
+  ['Site UI', 'tests/site-ui.mjs', []],
+  ['Game page UI', 'tests/game-ui.mjs', []],
+  ['Online lobby (end to end)', 'tests/online-lobby.mjs', []],
   ['Multiplayer rooms', 'tests/multiplayer.mjs', []],
 ];
 

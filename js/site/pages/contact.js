@@ -136,7 +136,9 @@ export function initContact() {
     const invalid = validate(form);
     if (invalid) {
       invalid.focus({ preventScroll: true });
-      invalid.scrollIntoView({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+      // scrollIntoView is universal in browsers but not in every DOM
+      // implementation; scrolling is a nicety, not a requirement.
+      invalid.scrollIntoView?.({ block: 'center', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
       status(statusNode, 'error', 'Please fix the highlighted fields and try again.');
       return;
     }

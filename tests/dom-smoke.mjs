@@ -15,19 +15,13 @@
  * not what it paints.
  */
 
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
-let JSDOM;
-try {
-  ({ JSDOM } = await import('jsdom'));
-} catch {
+import { loadPage, closeAllWindows, wait, hasJsdom } from './helpers/env.mjs';
+
+if (!hasJsdom) {
   console.log('jsdom is not installed — skipping the DOM smoke test.');
   console.log('Install it with:  npm install');
   process.exit(0);
 }
-
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 let failures = 0;
 let checks = 0;
@@ -36,117 +30,9 @@ const fail = (msg) => { checks += 1; failures += 1; console.log(`  FAIL  ${msg}`
 const expect = (cond, msg) => (cond ? pass(msg) : fail(msg));
 const section = (name) => console.log(`\n${name}`);
 
-/* -------------------------------------------------------------------------- */
-/*  Environment                                                                */
-/* -------------------------------------------------------------------------- */
-
+/** Captures console.error/warn so "it did not throw" is actually checked. */
 const consoleErrors = [];
 const consoleWarnings = [];
-
-/** Boots a page's HTML into jsdom and installs it as the global environment. */
-/** Every window we open, so the suite can close them and actually exit. */
-const openWindows = [];
-
-function loadPage(file, url = `https://synqtech.org/${file}`) {
-  const html = readFileSync(join(ROOT, file), 'utf8');
-  const dom = new JSDOM(html, {
-    url,
-    pretendToBeVisual: true,
-    runScripts: 'dangerously',   // the inline boot script is ours; jsdom cannot run ES modules
-  });
-  const { window } = dom;
-
-  // jsdom implements neither canvas nor WebAudio; both are stubbed below.
-  const ctxCalls = { count: 0 };
-  const noop = () => { ctxCalls.count += 1; };
-  const gradient = { addColorStop() {} };
-  const makeContext = () => new Proxy({}, {
-    get(target, prop) {
-      if (typeof prop === 'symbol') return undefined;
-      if (prop === 'canvas') return null;
-      if (prop === 'measureText') return () => ({ width: 10 });
-      if (prop === 'createLinearGradient' || prop === 'createRadialGradient') return () => gradient;
-      if (prop === 'createPattern') return () => null;
-      if (prop === 'getImageData') return () => ({ data: new Uint8ClampedArray(4) });
-      return noop;
-    },
-    set() { return true; },
-  });
-  window.HTMLCanvasElement.prototype.getContext = () => makeContext();
-
-  // Every AudioParam gets the full automation surface; the game only uses a
-  // few of these, but a stub that is missing one throws mid-sound-effect.
-  const audioParam = (value = 0) => ({
-    value,
-    setValueAtTime() { return this; },
-    linearRampToValueAtTime() { return this; },
-    exponentialRampToValueAtTime() { return this; },
-    setTargetAtTime() { return this; },
-    setValueCurveAtTime() { return this; },
-    cancelScheduledValues() { return this; },
-  });
-  // Real AudioNode.connect() returns the destination, which the game chains.
-  const node = (extra = {}) => ({
-    connect(dest) { return dest; },
-    disconnect() {},
-    ...extra,
-  });
-
-  class FakeAudioContext {
-    constructor() { this.state = 'running'; this.destination = node(); this.currentTime = 0; this.sampleRate = 44100; }
-    createGain() { return node({ gain: audioParam(1) }); }
-    createOscillator() { return node({ type: 'sine', frequency: audioParam(440), detune: audioParam(0), start() {}, stop() {}, onended: null }); }
-    createBufferSource() { return node({ buffer: null, playbackRate: audioParam(1), detune: audioParam(0), loop: false, start() {}, stop() {} }); }
-    createBuffer(ch, len) { return { length: len, numberOfChannels: ch, sampleRate: 44100, getChannelData: () => new Float32Array(len) }; }
-    createBiquadFilter() { return node({ type: 'lowpass', frequency: audioParam(800), Q: audioParam(1), gain: audioParam(0) }); }
-    createStereoPanner() { return node({ pan: audioParam(0) }); }
-    createDynamicsCompressor() { return node({ threshold: audioParam(-24), knee: audioParam(30), ratio: audioParam(12), attack: audioParam(0.003), release: audioParam(0.25) }); }
-    createWaveShaper() { return node({ curve: null, oversample: 'none' }); }
-    createDelay() { return node({ delayTime: audioParam(0) }); }
-    createConvolver() { return node({ buffer: null, normalize: true }); }
-    resume() { return Promise.resolve(); }
-    suspend() { return Promise.resolve(); }
-    close() { return Promise.resolve(); }
-  }
-  window.AudioContext = FakeAudioContext;
-  window.webkitAudioContext = FakeAudioContext;
-
-  // No IntersectionObserver in jsdom — the site must degrade without it.
-  const raf = (cb) => window.setTimeout(() => cb(Date.now()), 16);
-  window.requestAnimationFrame = raf;
-  window.cancelAnimationFrame = (id) => window.clearTimeout(id);
-  window.matchMedia = window.matchMedia || ((q) => ({
-    matches: false, media: q, onchange: null,
-    addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {},
-    dispatchEvent() { return false; },
-  }));
-  window.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };
-
-  // Publish as globals so the ES modules under test see a browser.
-  const globals = ['window', 'document', 'navigator', 'location', 'history', 'HTMLElement',
-    'HTMLCanvasElement', 'Element', 'Node', 'Event', 'CustomEvent', 'KeyboardEvent',
-    'MouseEvent', 'PointerEvent', 'requestAnimationFrame', 'cancelAnimationFrame',
-    'getComputedStyle', 'matchMedia', 'localStorage', 'sessionStorage', 'Image',
-    'ResizeObserver', 'IntersectionObserver', 'AudioContext', 'DOMParser'];
-  // NB: `performance` is deliberately not replaced — jsdom's Performance.now()
-  // delegates to the global one, so overwriting it recurses forever.
-  for (const key of globals) {
-    if (key === 'window') { globalThis.window = window; continue; }
-    const value = window[key];
-    if (value === undefined) continue;
-    // Some globals (navigator, performance, location) are getter-only on
-    // globalThis in Node; define them instead of assigning.
-    try {
-      globalThis[key] = value;
-    } catch {
-      Object.defineProperty(globalThis, key, { value, configurable: true, writable: true });
-    }
-  }
-  globalThis.devicePixelRatio = 1;
-
-  openWindows.push(window);
-  return { dom, window, document: window.document, ctxCalls };
-}
 
 function captureConsole(window) {
   const origError = console.error;
@@ -155,8 +41,6 @@ function captureConsole(window) {
   console.warn = (...args) => { consoleWarnings.push(args.join(' ')); origWarn(...args); };
   return () => { console.error = origError; console.warn = origWarn; };
 }
-
-const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /* -------------------------------------------------------------------------- */
 /*  Site pages                                                                 */
@@ -346,10 +230,6 @@ section('Aether Drift');
 }
 
 /* -------------------------------------------------------------------------- */
-
-// jsdom's timers keep the event loop alive, and the game's rAF loop will run
-// forever if a window is left open. Close everything, then exit explicitly.
-for (const w of openWindows) { try { w.close(); } catch { /* already gone */ } }
 
 console.log(`\n${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);

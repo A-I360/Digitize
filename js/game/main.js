@@ -1,6 +1,9 @@
 /**
  * Aether Drift — page controller.
  *
+ * @public — exported so tests can construct it against a DOM of their own;
+ * the module also self-boots once when it is loaded on the game page.
+ *
  * Wires the DOM overlays (title, modes, lobby, pause, settings, results) to the
  * Game instance. All game logic lives in the modules under js/game/; this file
  * only handles presentation, persistence of settings and the online flow.
@@ -33,15 +36,18 @@ const DEFAULT_SETTINGS = {
   touch: null, // null = decide from the device
 };
 
-class GamePage {
+export class GamePage {
   constructor() {
-    this.stage = $('[data-game-stage]');
-    this.canvas = $('[data-game-canvas]');
+    // Capture our document once. Everything below queries through this.q(),
+    // so the controller keeps working against the page it was built for.
+    this.doc = document;
+    this.stage = this.q('[data-game-stage]');
+    this.canvas = this.q('[data-game-canvas]');
     this.overlays = new Map();
-    $$('[data-overlay]').forEach((el) => this.overlays.set(el.dataset.overlay, el));
-    this.toast = $('[data-toast]');
-    this.hudButtons = $('[data-hud-buttons]');
-    this.touchRoot = $('[data-touch-root]');
+    this.qa('[data-overlay]').forEach((el) => this.overlays.set(el.dataset.overlay, el));
+    this.toast = this.q('[data-toast]');
+    this.hudButtons = this.q('[data-hud-buttons]');
+    this.touchRoot = this.q('[data-touch-root]');
     this.pendingMode = null;
     this.toastTimer = 0;
 
@@ -68,6 +74,15 @@ class GamePage {
     this.handleDeepLink();
     if (!this.deepLinked) this.show('title');
   }
+
+  /**
+   * Queries this page's own document rather than the global one. Equivalent in
+   * production (there is one document) but it means the controller cannot be
+   * confused by another document becoming current — which is exactly what the
+   * tests do when they run two game pages side by side.
+   */
+  q(sel) { return $(sel, this.doc); }
+  qa(sel) { return $$(sel, this.doc); }
 
   /* ---- Overlays --------------------------------------------------------- */
 
@@ -109,7 +124,7 @@ class GamePage {
     this.touchRoot?.classList.toggle('is-visible', wantsTouch);
     this.touchRoot?.setAttribute('aria-hidden', String(!wantsTouch));
 
-    $$('[data-setting]').forEach((input) => {
+    this.qa('[data-setting]').forEach((input) => {
       const key = input.dataset.setting;
       if (input.type === 'checkbox') input.checked = Boolean(s[key]);
       else if (input.type === 'range') input.value = String(s[key]);
@@ -124,7 +139,7 @@ class GamePage {
   /* ---- Level cards ------------------------------------------------------- */
 
   buildLevelCards() {
-    const grid = $('[data-level-grid]');
+    const grid = this.q('[data-level-grid]');
     if (!grid) return;
     grid.innerHTML = LEVELS.map((level, i) => `
       <button class="level-card" type="button" data-level="${escAttr(level.id)}" style="--level-tint:${TINTS[level.biome] || TINTS.dawn}">
@@ -153,7 +168,7 @@ class GamePage {
       this.run(action);
     });
 
-    $$('[data-setting]').forEach((input) => {
+    this.qa('[data-setting]').forEach((input) => {
       const key = input.dataset.setting;
       input.addEventListener('change', () => {
         this.settings[key] = input.type === 'checkbox'
@@ -292,10 +307,10 @@ class GamePage {
 
   openSetup(kind) {
     this.pendingMode = kind;
-    const heading = $('[data-setup-heading]');
-    const title = $('[data-setup-title]');
-    const codeRow = $('[data-code-row]');
-    const codeInput = $('[data-room-code]');
+    const heading = this.q('[data-setup-heading]');
+    const title = this.q('[data-setup-title]');
+    const codeRow = this.q('[data-code-row]');
+    const codeInput = this.q('[data-room-code]');
     if (heading) heading.textContent = kind === 'host' ? 'Create a room' : 'Join a room';
     if (title) title.textContent = kind === 'host' ? 'Host an online race' : 'Join an online race';
     if (codeRow) codeRow.hidden = kind !== 'join';
@@ -304,26 +319,26 @@ class GamePage {
   }
 
   async confirmSetup() {
-    const nickname = $('[data-nickname]')?.value?.trim() || 'Player';
-    const skinIndex = Number($('[data-skin]')?.value || 0);
+    const nickname = this.q('[data-nickname]')?.value?.trim() || 'Player';
+    const skinIndex = Number(this.q('[data-skin]')?.value || 0);
     this.settings.nickname = nickname;
     this.saveSettings();
 
     if (this.pendingMode === 'host') {
       this.show('lobby');
-      this.renderLobby(null);
+      this.renderPlayerList([]);
       const ok = await this.game.start(MODE.ONLINE, { nickname, skinIndex, levelIndex: 0 });
       if (!ok) { this.show('modes'); return; }
     } else {
-      const code = ($('[data-room-code]')?.value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+      const code = (this.q('[data-room-code]')?.value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
       if (code.length < 4) {
         this.showToast('Enter the six-character room code you were given.', 'warn', 4000);
         return;
       }
       this.show('lobby');
-      this.renderLobby(null);
+      this.renderPlayerList([]);
       const ok = await this.game.start(MODE.ONLINE, { nickname, skinIndex, roomCode: code });
-      if (!ok) { this.show('modes'); return; }
+      if (!ok) { this.show('setup'); return; }
     }
     this.blurActive();
   }
@@ -331,9 +346,9 @@ class GamePage {
   /* ---- Online -------------------------------------------------------------- */
 
   onRoomUpdate(room) {
-    const out = $('[data-room-code-out]');
-    const status = $('[data-lobby-status]');
-    const startBtn = document.querySelector('[data-action="start-match"]');
+    const out = this.q('[data-room-code-out]');
+    const status = this.q('[data-lobby-status]');
+    const startBtn = this.doc.querySelector('[data-action="start-match"]');
     const net = this.game.net;
 
     if (!room) {
@@ -361,7 +376,7 @@ class GamePage {
   }
 
   renderPlayerList(players, you) {
-    const list = $('[data-player-list]');
+    const list = this.q('[data-player-list]');
     if (!list) return;
     const colors = ['#00d4ff', '#ff5c7a', '#1dbb88', '#7c5cff'];
     list.innerHTML = players.length
@@ -382,8 +397,8 @@ class GamePage {
   }
 
   writeServerNotice() {
-    const box = document.querySelector('[data-server-notice]');
-    const text = document.querySelector('[data-server-notice-text]');
+    const box = this.doc.querySelector('[data-server-notice]');
+    const text = this.doc.querySelector('[data-server-notice-text]');
     if (!box || !text) return;
 
     if (MULTIPLAYER.serverUrl) {
@@ -401,10 +416,10 @@ class GamePage {
       box.hidden = false;
     }
 
-    $$('[data-online-hint]').forEach((el) => {
+    this.qa('[data-online-hint]').forEach((el) => {
       el.textContent = MULTIPLAYER.serverUrl ? 'available' : 'needs server';
     });
-    const note = document.querySelector('[data-online-note]');
+    const note = this.doc.querySelector('[data-online-note]');
     if (note) {
       note.textContent = MULTIPLAYER.serverUrl
         ? 'Online races sync positions over WebSockets. Latency is shown in the HUD.'
@@ -425,11 +440,11 @@ class GamePage {
   }
 
   onComplete(results) {
-    const time = $('[data-complete-time]');
-    const shards = $('[data-complete-shards]');
-    const note = $('[data-complete-note]');
-    const title = $('[data-complete-title]');
-    const next = document.querySelector('[data-action="next-level"]');
+    const time = this.q('[data-complete-time]');
+    const shards = this.q('[data-complete-shards]');
+    const note = this.q('[data-complete-note]');
+    const title = this.q('[data-complete-title]');
+    const next = this.doc.querySelector('[data-action="next-level"]');
     const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}.${String(Math.floor((s * 100) % 100)).padStart(2, '0')}`;
 
     if (time) time.textContent = fmt(results.time);
@@ -461,7 +476,7 @@ class GamePage {
 
   /** Buttons must not keep focus, or Space would re-trigger them in-game. */
   blurActive() {
-    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    if (this.doc.activeElement instanceof HTMLElement) this.doc.activeElement.blur();
   }
 
   handleDeepLink() {
@@ -477,7 +492,7 @@ class GamePage {
     }
     if (room) {
       this.openSetup('join');
-      const input = $('[data-room-code]');
+      const input = this.q('[data-room-code]');
       if (input) input.value = room.toUpperCase().replace(/[^A-Z0-9]/g, '');
       return;
     }
@@ -486,7 +501,8 @@ class GamePage {
 }
 
 function boot() {
-  if (!$('[data-game-canvas]')) return;
+  if (!$('[data-game-canvas]')) return; // not the game page
+  if (window.SYNQ_GAME) return;         // already booted
   try {
     window.SYNQ_GAME = new GamePage();
   } catch (error) {

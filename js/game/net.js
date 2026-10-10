@@ -70,10 +70,15 @@ export class MultiplayerClient {
     this.remoteStates = new Map();
   }
 
+  /** Registers a listener and returns a function that removes it. */
   on(event, fn) {
     if (!this.listeners.has(event)) this.listeners.set(event, new Set());
     this.listeners.get(event).add(fn);
-    return () => this.listeners.get(event)?.delete(fn);
+    return () => this.off(event, fn);
+  }
+
+  off(event, fn) {
+    this.listeners.get(event)?.delete(fn);
   }
 
   emit(event, payload) {
@@ -239,12 +244,49 @@ export class MultiplayerClient {
 
   /* ---- Public actions --------------------------------------------------- */
 
+  /**
+   * Waits for the server to confirm or refuse a pending create/join.
+   *
+   * Resolves with the room, rejects with the server's own wording. Without
+   * this the caller would carry on as though it were in a room, and the UI
+   * would sit on a "Connecting…" lobby that is never going to connect.
+   */
+  waitForRoom(timeoutMs = 8000) {
+    return new Promise((resolve, reject) => {
+      let settled = false;
+      const offRoom = this.on('room', (room) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        offError();
+        resolve(room);
+      });
+      const offError = this.on('serverError', (message) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        offRoom();
+        reject(new Error(message));
+      });
+      const timer = setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        offRoom();
+        offError();
+        this.lastError = 'The multiplayer server did not answer.';
+        this.setStatus(NET_STATUS.ERROR, this.lastError);
+        reject(new Error(this.lastError));
+      }, timeoutMs);
+    });
+  }
+
   async hostRoom({ name, level }) {
     this.pendingName = name;
     this.pendingLevel = level;
     this.pendingRoom = { host: true };
     await this.connect();
     this.send({ t: 'create', name, level });
+    return this.waitForRoom();
   }
 
   async joinRoom({ code, name }) {
@@ -252,6 +294,7 @@ export class MultiplayerClient {
     this.pendingRoom = { code: code.toUpperCase().replace(/[^A-Z0-9]/g, '') };
     await this.connect();
     this.send({ t: 'join', code: this.pendingRoom.code, name });
+    return this.waitForRoom();
   }
 
   setReady() { this.send({ t: 'ready' }); }
