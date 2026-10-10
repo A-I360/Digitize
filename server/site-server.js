@@ -59,10 +59,30 @@ function rateLimited(ip) {
 }
 
 /** Resolves a request path inside ROOT, or null if it tries to escape. */
+/**
+ * Directory names that are never served.
+ *
+ * `../` traversal is already blocked below, but that is not the only way to
+ * reach something private: the site root IS the repository root, so
+ * `server/data/enquiries.log` — every name, email address, IP and budget
+ * anyone has submitted — was sitting at a public URL. Anything that is not
+ * part of the website must be unreachable, whether or not it is inside ROOT.
+ */
+const BLOCKED_SEGMENTS = new Set(['server', 'node_modules', '.git', 'tools']);
+
 function safePath(urlPath) {
-  const decoded = decodeURIComponent(urlPath.split('?')[0].split('#')[0]);
+  let decoded;
+  try {
+    decoded = decodeURIComponent(urlPath.split('?')[0].split('#')[0]);
+  } catch {
+    return null; // malformed percent-encoding
+  }
   const candidate = resolve(join(ROOT, normalize(decoded)));
   if (candidate !== ROOT && !candidate.startsWith(ROOT + sep)) return null;
+
+  const inside = candidate.slice(ROOT.length).split(sep).filter(Boolean);
+  if (inside.some((seg) => BLOCKED_SEGMENTS.has(seg) || seg.startsWith('.'))) return null;
+
   return candidate;
 }
 
@@ -173,9 +193,42 @@ const API_ROUTES = {
   '/api/health': ['GET', 'HEAD'],
 };
 
+/**
+ * Parses a request target without throwing.
+ *
+ * `new URL()` rejects a protocol-relative target like `//` (Node reads it as
+ * "host is empty") and rejects some Host headers outright. Either would throw
+ * inside the request handler — and an uncaught throw there takes the whole
+ * site down, not just the one request.
+ */
+function parseTarget(req) {
+  try {
+    return new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+  } catch {
+    return null;
+  }
+}
+
 const server = createServer(async (req, res) => {
+  // One bad request must never be able to stop the site from serving.
+  try {
+    await handleRequest(req, res);
+  } catch (error) {
+    console.error(`[synq] ${req.method} ${req.url} →`, error);
+    if (!res.headersSent) {
+      res.writeHead(500, { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' });
+    }
+    res.end('Internal server error');
+  }
+});
+
+async function handleRequest(req, res) {
   const ip = req.socket.remoteAddress || 'unknown';
-  const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+  const url = parseTarget(req);
+  if (!url) {
+    res.writeHead(400, { 'Content-Type': 'text/plain' });
+    return res.end('Bad request');
+  }
 
   if (req.method === 'POST' && url.pathname === '/api/contact') {
     return handleContact(req, res, ip);
@@ -225,7 +278,7 @@ const server = createServer(async (req, res) => {
     res.writeHead(500, { 'Content-Type': 'text/plain' });
     res.end(`Server error: ${error.message}`);
   }
-});
+}
 
 /* -------------------------------------------------------------------------- */
 /*  WebSocket proxy                                                            */

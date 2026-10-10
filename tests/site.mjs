@@ -160,6 +160,43 @@ section('Error handling');
   expect(res.status === 404 || res.status === 403, `path traversal is refused (${res.status})`);
 }
 
+section('Nothing private is reachable');
+{
+  // The site root is the repository root, so "inside the root" is not the same
+  // thing as "public". The worst of these was real: enquiries.log holds every
+  // visitor's name, email, IP address and budget.
+  const secretPaths = [
+    'server/data/enquiries.log',
+    'server/data/',
+    'server/site-server.js',
+    'server/multiplayer-server.js',
+    '.git/config',
+    'node_modules/jsdom/package.json',
+  ];
+  for (const path of secretPaths) {
+    const res = await fetch(`${BASE}/${path}`, { redirect: 'manual' });
+    await res.text().catch(() => {});
+    expect(res.status === 404, `/${path} is not served (${res.status})`);
+  }
+}
+
+section('A malformed request cannot stop the site');
+{
+  // `//` parses as a protocol-relative URL with an empty host, which Node's
+  // URL rejects — an uncaught throw inside the handler used to kill the
+  // process, taking every page down with it.
+  for (const bad of ['//', '/%ZZ', '/%', '/a%2', '/../' + 'a'.repeat(200)]) {
+    const res = await fetch(`${BASE}${bad}`, { redirect: 'manual' });
+    await res.text().catch(() => {});
+    expect(res.status >= 400 && res.status < 500, `"${bad.slice(0, 20)}" is rejected cleanly (${res.status})`);
+  }
+  // And the server must still be standing afterwards.
+  const health = await fetch(`${BASE}/api/health`);
+  expect(health.status === 200, `the server survives a malformed request (health ${health.status})`);
+  const home = await fetch(`${BASE}/`);
+  expect(home.status === 200, `and still serves the site afterwards (${home.status})`);
+}
+
 /* -------------------------------------------------------------------------- */
 /*  6. Contact endpoint                                                        */
 /* -------------------------------------------------------------------------- */

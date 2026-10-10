@@ -173,16 +173,8 @@ Two of these are worth calling out.
 platforms, jumps pits and stomps enemies. If the bot can finish a level, a person can.
 
 **The DOM tests** exist because there is no browser here. They load the pages in jsdom and
-run the actual modules — which is how they found five bugs that every static check and
-every simulation test had missed:
-
-| Bug | What it broke |
-|---|---|
-| The boot script called `document.body.appendChild` from inside `<head>` | `document.body` is `null` there, so it threw and silently disabled the loader *and* the pre-paint theme |
-| `canvas-field.js` built an `IntersectionObserver` unconditionally | crashed on any DOM without one |
-| `main.js` called `this.renderLobby()`, which does not exist | clicking *Create a room* threw, so the whole online flow did nothing |
-| Ghosts had no `skin` object | online play crashed on the first frame a remote player was drawn |
-| `hostRoom`/`joinRoom` resolved as soon as they sent | a refused join left the visitor stranded on a "Connecting…" lobby that was never going to connect |
+run the actual modules, rather than asserting on markup. They found seven bugs that every
+static check and every simulation test had missed — [listed below](#bugs-the-tests-found-and-fixed).
 
 The online lobby test is the one I would keep if I could only keep one: it runs two
 browser-like pages against the real room server and asserts the things a visitor would
@@ -240,7 +232,27 @@ See [SETUP.md](SETUP.md) for the checklist to make it yours.
   so a determined cheater could lie about their position. That is a deliberate trade for a
   server that needs no game logic; add server-side simulation if you need to prevent it.
 - The contact endpoint appends to `server/data/enquiries.log`. Anything you actually rely
-  on should forward to a real inbox or CRM.
+  on should forward to a real inbox or CRM. The static server refuses to serve anything
+  under `server/`, `node_modules/`, `.git/` or any dotfile — the site root is the
+  repository root, so without that blocklist the enquiry log (names, email addresses, IP
+  addresses, budgets) was readable at a public URL. Two suites now assert it stays that way.
+
+## Bugs the tests found, and fixed
+
+Static analysis, the level bot and the HTTP crawl all passed while these were live:
+
+| Bug | What it broke |
+|---|---|
+| The boot script called `document.body.appendChild` from inside `<head>` | `document.body` is `null` there, so it threw and silently disabled the loading animation *and* the pre-paint theme on every page |
+| `canvas-field.js` built an `IntersectionObserver` unconditionally | crashed on any DOM without one |
+| `main.js` called `this.renderLobby()`, which does not exist | clicking *Create a room* threw, so the whole online flow did nothing |
+| Ghosts had a `skinIndex` but no `skin` | online play crashed on the first frame a remote player was drawn |
+| `hostRoom`/`joinRoom` resolved as soon as they sent | a refused join stranded the visitor on a "Connecting…" lobby that was never going to connect |
+| `new URL()` threw on a protocol-relative target like `//` | **one malformed request killed the site server**, taking every page down |
+| The static server served anything inside the repo root | `server/data/enquiries.log` — every visitor's name, email and IP — was publicly readable |
+
+The last two are the reason the crawl suite now fires hostile paths at the server and
+then checks that the homepage still answers.
 
 ---
 
