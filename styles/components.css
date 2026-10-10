@@ -679,6 +679,19 @@ html:not(.dark) .site-footer { color-scheme: dark; }
 }
 .noscript-nav a:hover { color: var(--accent); }
 
+.noscript-note {
+  position: relative;
+  z-index: var(--z-nav);
+  max-width: 68ch;
+  margin: 0 auto;
+  padding: 1.25rem var(--gutter) 0;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+}
+.noscript-note strong { color: var(--text); }
+.noscript-note a { color: var(--accent); }
+
 /* --------------------------------------------------------------------------
    Currency switcher
    -------------------------------------------------------------------------- */

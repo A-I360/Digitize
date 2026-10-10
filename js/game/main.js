@@ -36,6 +36,12 @@ const DEFAULT_SETTINGS = {
   touch: null, // null = decide from the device
 };
 
+/**
+ * Screens that own the whole panel. If the game pauses while one of them is
+ * up, the pause overlay must not steal it.
+ */
+const OVERRIDES_PAUSE = new Set(['settings', 'lobby', 'setup', 'complete', 'run-complete', 'credits']);
+
 export class GamePage {
   constructor() {
     // Capture our document once. Everything below queries through this.q(),
@@ -81,6 +87,10 @@ export class GamePage {
    * confused by another document becoming current — which is exactly what the
    * tests do when they run two game pages side by side.
    */
+/**
+ * Screens that own the whole panel. If the game pauses while one of them is
+ * up, the pause overlay must not steal it.
+ */
   q(sel) { return $(sel, this.doc); }
   qa(sel) { return $$(sel, this.doc); }
 
@@ -433,6 +443,12 @@ export class GamePage {
     if (state.state === STATE.RUNNING) {
       this.hudButtons.hidden = false;
       if (this.current !== 'lobby') this.hideAll();
+    }
+    // Anything that pauses the game — not just the Escape key — has to show
+    // the pause screen. Without this, switching tabs froze the game mid-run
+    // with no overlay and no visible way back into it.
+    if (state.state === STATE.PAUSED && !OVERRIDES_PAUSE.has(this.current)) {
+      this.show('pause');
     }
     if (state.state === STATE.ENDED) {
       this.show('run-complete');

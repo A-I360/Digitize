@@ -15,6 +15,8 @@
     "test:ui": "node tests/game-ui.mjs",
     "test:online": "node tests/online-lobby.mjs",
     "test:site-ui": "node tests/site-ui.mjs",
+    "test:a11y": "node tests/a11y.mjs",
+    "test:device": "node tests/device.mjs",
     "test:multiplayer": "node tests/multiplayer.mjs",
     "test:site": "node tests/site.mjs"
   },

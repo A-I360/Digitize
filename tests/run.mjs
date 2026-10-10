@@ -19,7 +19,9 @@ const SUITE = [
   ['Site crawl', 'tests/site.mjs', []],
   ['DOM smoke test', 'tests/dom-smoke.mjs', []],
   ['Site UI', 'tests/site-ui.mjs', []],
+  ['Accessibility audit', 'tests/a11y.mjs', []],
   ['Game page UI', 'tests/game-ui.mjs', []],
+  ['Device behaviour', 'tests/device.mjs', []],
   ['Online lobby (end to end)', 'tests/online-lobby.mjs', []],
   ['Multiplayer rooms', 'tests/multiplayer.mjs', []],
 ];
