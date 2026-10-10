@@ -185,11 +185,13 @@ class Transition {
     await wait(reduced ? 90 : COVER_MS);
     window.location.href = href;
 
-    // If the browser somehow declines to navigate, release the latch.
+    // If the browser somehow declines to navigate, release the latch. A real
+    // browser starts navigating the moment href is assigned, so 1.2s is a
+    // generous margin — anything longer is just time spent stuck behind a veil.
     setTimeout(() => {
       this.busy = false;
       veil.classList.remove('is-busy', 'is-covering');
-    }, 3000);
+    }, 1200);
   }
 }
 

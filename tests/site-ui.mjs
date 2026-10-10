@@ -244,6 +244,98 @@ section('Pricing');
   }
 }
 
+section('Structured data');
+{
+  const env = loadPage('index.html');
+  const { document } = env;
+  const { mountChrome } = await import('../js/site/chrome.js');
+  mountChrome();
+  const { emitForPage } = await import('../js/site/structured-data.js');
+  emitForPage('home');
+  await wait(30);
+
+  const blocks = [...document.querySelectorAll('script[type="application/ld+json"]')];
+  expect(blocks.length >= 2, `the home page carries structured data (${blocks.length} blocks)`);
+
+  const parsed = blocks.map((b) => {
+    try { return JSON.parse(b.textContent); } catch { return null; }
+  });
+  expect(parsed.every(Boolean), 'and every block is valid JSON');
+
+  const org = parsed.find((p) => p?.['@type'] === 'ProfessionalService');
+  expect(Boolean(org), 'the studio is described as an organisation');
+  expect(org?.name === SITE.name && org?.email === SITE.email,
+    'with the same name and email the page shows, so the two cannot drift');
+
+  // The footer shows placeholder social links. Structured data must not
+  // repeat them — that would be asserting a fact that is not true.
+  const placeholders = SITE.social.filter((s) => s.placeholder).map((s) => s.href);
+  const sameAs = org?.sameAs || [];
+  expect(placeholders.every((href) => !sameAs.includes(href)),
+    `placeholder social profiles are kept out of the schema (${placeholders.length} excluded)`);
+  expect(sameAs.length > 0, `but the real ones are included (${sameAs.length})`);
+
+  const site = parsed.find((p) => p?.['@type'] === 'WebSite');
+  expect(Boolean(site), 'and the site itself is described');
+
+  closeAllWindows();
+}
+
+{
+  const env = loadPage('game.html');
+  const { document } = env;
+  const { emitForPage } = await import('../js/site/structured-data.js');
+  emitForPage('game');
+  await wait(20);
+
+  const game = [...document.querySelectorAll('script[type="application/ld+json"]')]
+    .map((b) => { try { return JSON.parse(b.textContent); } catch { return null; } })
+    .find((p) => p?.['@type'] === 'VideoGame');
+  expect(Boolean(game), 'the game page describes the game');
+  expect(game?.playMode?.includes('SinglePlayer') && game?.playMode?.includes('CoOp'),
+    'both single-player and multiplayer are declared');
+  expect(game?.isAccessibleForFree === true, 'and that it is free to play');
+  // No aggregateRating and no offers: there are no ratings and nothing is sold.
+  expect(!game?.aggregateRating && !game?.offers,
+    'it claims no ratings and no price, because there are none');
+  closeAllWindows();
+}
+
+{
+  const env = loadPage('project.html', 'https://synqtech.org/project.html?slug=aether-drift');
+  const { document } = env;
+  const { emitForPage } = await import('../js/site/structured-data.js');
+  emitForPage('project', { slug: 'aether-drift' });
+  await wait(20);
+
+  const parsed = [...document.querySelectorAll('script[type="application/ld+json"]')]
+    .map((b) => { try { return JSON.parse(b.textContent); } catch { return null; } });
+  const work = parsed.find((p) => ['VideoGame', 'SoftwareApplication'].includes(p?.['@type']));
+  expect(Boolean(work), 'a case study describes the work');
+
+  const crumbs = parsed.find((p) => p?.['@type'] === 'BreadcrumbList');
+  expect(Boolean(crumbs), 'and carries breadcrumbs');
+  expect(crumbs?.itemListElement?.length === 3,
+    `home → work → project (${crumbs?.itemListElement?.length} items)`);
+  expect(crumbs?.itemListElement?.every((i, n) => i.position === n + 1),
+    'numbered in order, which is what makes them valid');
+
+  // A sample project must not be presented as shipped client work.
+  // `orbit-commerce` is flagged `sample: true` in the project data.
+  const SAMPLE_SLUG = PROJECTS.find((p) => p.sample)?.slug;
+  const sampleEnv = loadPage('project.html', `https://synqtech.org/project.html?slug=${SAMPLE_SLUG}`);
+  const { emitForPage: emit2 } = await import('../js/site/structured-data.js');
+  emit2('project', { slug: SAMPLE_SLUG });
+  await wait(20);
+  const sampleBlocks = [...sampleEnv.document.querySelectorAll('script[type="application/ld+json"]')]
+    .map((b) => { try { return JSON.parse(b.textContent); } catch { return null; } });
+  const sampleWork = sampleBlocks.find((p) => ['SoftwareApplication', 'VideoGame'].includes(p?.['@type']));
+  expect(Boolean(sampleWork), `a sample project is described (${SAMPLE_SLUG})`);
+  expect(/sample|illustrative/i.test(sampleWork?.comment || ''),
+    'and the structured data says it is a sample, not client work');
+  closeAllWindows();
+}
+
 section('Theme');
 {
   const env = loadPage('index.html');

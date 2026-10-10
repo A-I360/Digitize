@@ -162,7 +162,8 @@ npm test        # 9 suites, ~25 s
 | Colour contrast | every text/background pair in the design tokens meets WCAG AA, in both themes |
 | Site crawl | all 8 pages serve; SEO tags, one `h1`, alt text, no third-party assets; all 22 internal links resolve; the contact endpoint accepts, validates and rejects correctly |
 | DOM smoke test | the real page modules run inside jsdom: chrome mounts, the portfolio renders from data, the game boots, moves, jumps and pauses without a console error |
-| Site UI | the contact form never claims to have sent what it did not send; sample projects are flagged; the currency switch derives both currencies from one rate |
+| Site UI | the contact form never claims to have sent what it did not send; sample projects are flagged; the currency switch derives both currencies from one rate; structured data is valid and omits the placeholders |
+| Loading and transitions | the boot loader completes even when every readiness signal hangs; an internal navigation skips it; a second click cannot double-navigate; bfcache restores clear the veil |
 | Game page UI | title → play, pause, settings, level select, local two-player and all four deep links |
 | Accessibility audit | 12 rules against the rendered DOM: accessible names, aria that resolves, heading order, landmarks, no positive tabindex |
 | Device behaviour | touch controls mount only on a coarse pointer and actually move the runner; a hidden tab stops the loop; the game never scrolls the page; no `AudioContext` is survivable |
@@ -255,9 +256,20 @@ Static analysis, the level bot and the HTTP crawl all passed while these were li
 | The static server served anything inside the repo root | `server/data/enquiries.log` — every visitor's name, email and IP — was publicly readable |
 | `onGameState` handled RUNNING and ENDED but not PAUSED | switching tabs froze the game with no overlay and no visible way to resume — the pause screen followed the key press, not the state |
 | Nothing was compressed | every visitor downloaded 284 KB of raw JS and CSS. Brotli takes the biggest file from 30.3 KB to 7.8 KB |
+| The navigation failsafe waited 3s to release the veil | a browser that declined to navigate left the visitor behind a covering veil for three seconds. Now 1.2s |
 
 The last two are the reason the crawl suite now fires hostile paths at the server and
 then checks that the homepage still answers.
+
+## Structured data
+
+JSON-LD is generated in `js/site/structured-data.js` from the same `config.js`
+the visible page is built from, so the machine-readable facts cannot drift from
+the human-readable ones. One rule matters more than the rest: **the placeholder
+social links in the footer are filtered out**. They are shown as labelled
+stand-ins, but `sameAs` in schema.org is a factual assertion, so only the
+profiles that exist are emitted. The game declares no `aggregateRating` and no
+`offers`, because there are no ratings and nothing is for sale.
 
 ## Performance
 

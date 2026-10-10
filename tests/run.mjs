@@ -19,6 +19,7 @@ const SUITE = [
   ['Site crawl', 'tests/site.mjs', []],
   ['DOM smoke test', 'tests/dom-smoke.mjs', []],
   ['Site UI', 'tests/site-ui.mjs', []],
+  ['Loading and transitions', 'tests/transitions.mjs', []],
   ['Accessibility audit', 'tests/a11y.mjs', []],
   ['Performance budgets', 'tests/performance.mjs', []],
   ['Game page UI', 'tests/game-ui.mjs', []],

@@ -17,6 +17,7 @@ import { initPortfolio } from './pages/portfolio.js';
 import { initProjectPage } from './pages/project.js';
 import { initServices } from './pages/services.js';
 import { initContact } from './pages/contact.js';
+import { emitForPage } from './structured-data.js';
 
 const PAGES = {
   home: [initHome],
@@ -60,6 +61,16 @@ function boot() {
   initNav();
 
   const page = document.body.dataset.page || 'home';
+
+  // Structured data is built from config.js, so it can never claim anything
+  // the page itself does not also say.
+  try {
+    const params = new URLSearchParams(location.search);
+    emitForPage(page, { slug: params.get('slug') || undefined });
+  } catch (error) {
+    console.error('[synq] structured data failed', error);
+  }
+
   (PAGES[page] || []).forEach((init) => {
     try {
       init();
