@@ -243,3 +243,49 @@ if (newsForm) {
     input.placeholder = 'Thanks — we will be in touch';
   });
 }
+
+// =========================================================
+// PORTFOLIO FILTER
+// =========================================================
+const filterBtns = $$('.filter-btn');
+const portfolioCards = $$('.portfolio-card');
+if (filterBtns.length && portfolioCards.length) {
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      filterBtns.forEach(b => b.classList.toggle('active', b === btn));
+      portfolioCards.forEach(card => {
+        if (filter === 'all' || card.dataset.category === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+}
+
+// =========================================================
+// CONTACT PAGE FORM (WhatsApp submit)
+// =========================================================
+const cpForm = $('#contact-page-form');
+if (cpForm) {
+  cpForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+    const data = new FormData(form);
+    const lines = [
+      'Hi SYNQ Technological Services, I would like to start a project.',
+      'Name: ' + data.get('name'),
+      'Email: ' + data.get('email'),
+      'Project type: ' + data.get('type'),
+      'Budget: ' + data.get('budget'),
+    ];
+    if (data.get('message')) lines.push('Details: ' + data.get('message'));
+    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(lines.join('\n')), '_blank', 'noopener');
+    const success = cpForm.querySelector('.form-success');
+    if (success) success.textContent = 'Opening WhatsApp with your message — send it to reach us.';
+    form.reset();
+  });
+}
